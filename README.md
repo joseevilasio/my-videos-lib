@@ -3,6 +3,7 @@
 O desafio consiste em criar um CRUD (Create, Read, Update, Delete)
 
 Documentação do inicio ao fim do projeto no dev.to, status indicando o andamento. 
+
 Exemplo: Não iniciado ❌ / Iniciado ✅
 
 ## Semana 1 - Implementando uma API REST ❌
