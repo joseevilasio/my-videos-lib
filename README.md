@@ -2,7 +2,7 @@
 
 O desafio consiste em criar um CRUD (Create, Read, Update, Delete)
 
-Documentação do inicio ao fim do projeto no dev.to, status indicando o andamento. 
+Documentação do inicio ao fim do projeto no dev.to/josejunior, status indicando o andamento. 
 
 Exemplo: Não iniciado ❌ / Iniciado ✅
 
