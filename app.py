@@ -1,7 +1,6 @@
-from flask import Flask, g
-from db import conn
-import json
+from flask import Flask, jsonify
 import sqlite3
+
 
 app = Flask(__name__)
 
@@ -19,20 +18,27 @@ def hello():
 
 
 @app.route("/videos")
-def list_all(post_id=None):
+def list_all():
     
     cursor = get_db_connection() 
     fields = ("id", "title", "description", "url")
-    results = cursor.execute("SELECT * FROM video;")        
-    return [dict(zip(fields, video)) for video in results]
+    results = cursor.execute("SELECT * FROM video;")
+    result_query = [dict(zip(fields, video)) for video in results]           
+    return jsonify(result_query)    
 
 
 @app.route("/videos/<int:video_id>")
-def list_one(video_id):
+def list_one(video_id):    
     
     cursor = get_db_connection() 
     fields = ("id", "title", "description", "url")
-    results = cursor.execute(f"SELECT * FROM video WHERE id = {video_id};")        
-    return [dict(zip(fields, video)) for video in results]
+    results = cursor.execute(f"SELECT * FROM video WHERE id = {video_id};")
+    result_query = [dict(zip(fields, video)) for video in results]           
+    
+    if result_query:
+        return jsonify(result_query)
+    else:
+        return f"not found: {video_id}"
+    
 
     
