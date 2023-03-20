@@ -6,7 +6,7 @@ Documentação do inicio ao fim do projeto no dev.to/josejunior, status indicand
 
 Exemplo: Não iniciado ❌ / Iniciado ✅
 
-## Semana 1 - Implementando uma API REST ❌
+## Semana 1 - Implementando uma API REST ✅
 
 ## Semana 2 - Adicionando entidades e relacionamentos ❌
 
