@@ -1,8 +1,13 @@
 from sqlite3 import connect
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+def configure(app):
+    db.init_app(app)
 
 conn = connect("database.db")
 cursor = conn.cursor()
-
 
 conn.execute(
     """\
@@ -14,7 +19,6 @@ conn.execute(
     );
     """
 )
-
 
 
 videos = [

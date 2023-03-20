@@ -1,0 +1,5 @@
+[default]
+sqlite_uri = "sqlite:///api/database.db"
+extensions = [
+    "api.database:configure"
+]

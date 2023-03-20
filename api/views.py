@@ -1,16 +1,6 @@
-from flask import Flask, jsonify
-import sqlite3
+from api.app import create_app
 
-
-app = Flask(__name__)
-
-
-DATABASE = "database.db"
-
-def get_db_connection():
-    conn = sqlite3.connect("database.db").cursor()    
-    return conn
-
+create_app()
 
 @app.route("/")
 def hello():    
@@ -39,6 +29,3 @@ def list_one(video_id):
         return jsonify(result_query)
     else:
         return f"not found: {video_id}"
-    
-
-    
