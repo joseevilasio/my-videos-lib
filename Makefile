@@ -7,6 +7,9 @@ install:
 update:
 	@poetry update
 
+env:
+	@poetry env use
+
 test:
 	@poetry run pytest -s --forked
 
