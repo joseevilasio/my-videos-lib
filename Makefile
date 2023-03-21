@@ -1,5 +1,5 @@
 # Makefile
-.PHONY: install update ipython clean test pflake8 fmt lint watch docs docs-serve build publish code-coverage
+.PHONY: install update env ipython clean test pflake8 fmt lint watch docs docs-serve build publish code-coverage
 
 install:
 	@poetry install

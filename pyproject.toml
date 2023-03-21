@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "api-myvideos"
+name = "api"
 version = "0.1.0"
 description = "CRUD API"
 authors = ["Jose Junior"]

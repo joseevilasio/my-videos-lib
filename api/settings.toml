@@ -1,6 +1,6 @@
 [default]
-sqlite_uri = "sqlite:///api/database.db"
+SQLALCHEMY_DATABASE_URI = "sqlite:///api/database.db"
 extensions = [
     "api.database:configure",
-    "api.controller:configure"
+    "api.commands:configure"
 ]
