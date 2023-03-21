@@ -1,15 +1,19 @@
 from sqlite3 import connect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, MetaData
+
+
+engine = create_engine("sqlite:///api/database.db")
+#metadata = MetaData(bind=engine)
+conn = engine.connect()
 
 db = SQLAlchemy()
 
 def configure(app):
     db.init_app(app)
 
-conn = connect("database.db")
-cursor = conn.cursor()
 
-conn.execute(
+conn.exec_driver_sql(
     """\
     CREATE TABLE if not exists video (
         id integer PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +23,6 @@ conn.execute(
     );
     """
 )
-
 
 videos = [
     {
@@ -34,16 +37,15 @@ videos = [
     },
 ]
 
-count = cursor.execute("SELECT * FROM video;").fetchall()
+count = conn.exec_driver_sql("SELECT * FROM video;").fetchall()
 if not count:
-    cursor.executemany(
+    conn.exec_driver_sql(
         """\
         INSERT INTO video(title, description, url)
         VALUES (:title, :description, :url);
         """,
         videos,
     )
-    conn.commit()
-
-videos = cursor.execute("SELECT * FROM video;").fetchall()
+    
+videos = conn.exec_driver_sql("SELECT * FROM video;").fetchall()
 assert len(videos) >= 2
