@@ -1,3 +1,39 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q -vv"
+testpaths = [
+    "tests",
+]
+
+[tool.flake8]
+exclude = [".venv", "build", ".vscodelocal", "migrations"]
+max-line-length = 79
+# extend-ignore = "W293,"
+
+[tool.black]
+line-length = 79
+target-version = ["py36", "py37"]
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.venv
+  | _build
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+[tool.isort]
+profile = "black"
+src_paths = ["api", "tests"]
+multi_line_output = 3  # VHI
+line_length = 79
+force_grid_wrap = 0
+use_parentheses = true
+include_trailing_comma = true
+
 [tool.poetry]
 name = "api"
 version = "0.1.0"
