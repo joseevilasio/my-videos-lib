@@ -1,23 +1,23 @@
-from api.database import conn
 from flask import jsonify
+
+from api.database import conn
 
 
 def get_all_videos():
     """Get all videos from database and list information"""
-    
+
     fields = ("id", "title", "description", "url")
-    query = conn.exec_driver_sql(f"SELECT * FROM video;")    
+    query = conn.exec_driver_sql("SELECT * FROM video;")
     results = [dict(zip(fields, video)) for video in query]
     return jsonify(results)
 
 
 def get_video_by_id(video_id):
     """Get video by id from database and list information"""
-    
+
     fields = ("id", "title", "description", "url")
     query = conn.exec_driver_sql(f"SELECT * FROM video WHERE id = {video_id};")
-    result_query = [dict(zip(fields, video)) for video in query]           
-    
+    result_query = [dict(zip(fields, video)) for video in query]
     if result_query:
         return jsonify(result_query)
     else:

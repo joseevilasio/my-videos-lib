@@ -1,4 +1,5 @@
 from flask import Flask
+
 from api.config import configure
 
 

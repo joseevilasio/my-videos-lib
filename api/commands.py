@@ -2,11 +2,11 @@ import click
 from flask import Flask
 
 from api.controller import (
+    add_new_video,
+    delete_video,
     get_all_videos,
     get_video_by_id,
-    add_new_video,
     update_video,
-    delete_video,
 )
 
 
@@ -27,7 +27,7 @@ def show():
 def show_one():
     """List only one video by id"""
     click.echo(get_video_by_id())
-        
+
 
 def configure(app: Flask):
     app.cli.add_command(controller)

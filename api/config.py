@@ -1,4 +1,5 @@
 import os
+
 from dynaconf import FlaskDynaconf
 from flask import Flask
 

@@ -30,8 +30,8 @@ lint:
 	@poetry run pflake8
 
 fmt:
-	@poetry run isort api tests integration
-	@poetry run black api tests integration
+	@poetry run isort api tests
+	@poetry run black api tests
 
 clean:            ## Clean unused files.
 	@find ./ -name '*.pyc' -exec rm -f {} \;
