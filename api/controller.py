@@ -26,28 +26,34 @@ def get_video_by_id(video_id):
 def add_new_video(title, description, url):
     """Add new video on database"""
     video = dict(
-            {"title": title,
-             "description": description,
-             "url": url,
-             })
+        {
+            "title": title,
+            "description": description,
+            "url": url,
+        }
+    )
 
-    query = conn.exec_driver_sql(
+    conn.exec_driver_sql(
         """\
         INSERT INTO video (title, description , url)
         VALUES (:title, :description, :url);
         """,
         video,
     )
-    
+
     conn.commit()
 
     return "created with success"
 
-def update_video():
+
+def update_video(video_id, title, description, url):
     """Update video infor on database"""
     ...
+
+    return "created with success"
 
 
 def delete_video(video_id=None):
     """Delete one video by id or all videos on database"""
-    ...
+    conn.exec_driver_sql(f"DELETE FROM video WHERE id={video_id};")
+    return "delete success"

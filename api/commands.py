@@ -37,6 +37,15 @@ def show_one(id):
 def new_video(title, description, url):
     """Add new video on database"""
     result = add_new_video(title, description, url)
+    # TODO: Adicionar retorno com os dados do video adicionado
+    print(result)
+
+
+@controller.command("delete")
+@click.argument("id")
+def delete(id):
+    """Delete one video by id or all videos on database"""
+    result = delete_video(id)
     print(result)
 
 
