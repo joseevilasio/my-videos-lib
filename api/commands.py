@@ -1,4 +1,5 @@
 import click
+from flask import Flask
 
 from api.controller import (
     get_all_videos,
@@ -14,5 +15,19 @@ def controller():
     """Manage api"""
 
 
-def configure(app):
+@controller.command("show")
+def show():
+    """List all videos"""
+    for video in get_all_videos():
+        click.echo(video)
+
+
+@controller.command("show-by-id")
+@click.argument("id")
+def show_one():
+    """List only one video by id"""
+    click.echo(get_video_by_id())
+        
+
+def configure(app: Flask):
     app.cli.add_command(controller)

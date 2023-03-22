@@ -1,5 +1,5 @@
 # Makefile
-.PHONY: install update env ipython clean test pflake8 fmt lint watch docs docs-serve build publish code-coverage
+.PHONY: install update env set-app ipython clean test pflake8 fmt lint watch docs docs-serve build publish code-coverage
 
 install:
 	@poetry install
@@ -9,6 +9,9 @@ update:
 
 env:
 	@poetry env use
+
+set-app:
+	@export FLASK_APP=api.app:create_app FLASK_ENV=development
 
 test:
 	@poetry run pytest -s --forked

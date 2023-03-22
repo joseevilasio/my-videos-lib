@@ -1,7 +1,7 @@
 from sqlite3 import connect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, MetaData
-
+from flask import Flask
 
 engine = create_engine("sqlite:///api/database.db")
 #metadata = MetaData(bind=engine)
@@ -9,7 +9,7 @@ conn = engine.connect()
 
 db = SQLAlchemy()
 
-def configure(app):
+def configure(app:Flask):
     db.init_app(app)
 
 
