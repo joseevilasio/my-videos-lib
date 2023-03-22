@@ -24,7 +24,7 @@ def show():
 
 @controller.command("show-by-id")
 @click.argument("id")
-def show_one(id):
+def show_one(id, type=click.STRING, required=True):
     """List only one video by id"""
     result = get_video_by_id(id)
     click.echo(result)
@@ -42,12 +42,25 @@ def new_video(title, description, url):
 
 
 @controller.command("delete")
-@click.argument("id")
+@click.argument("id", type=click.STRING, required=True)
 def delete(id):
     """Delete one video by id or all videos on database"""
     result = delete_video(id)
     print(result)
 
 
+@controller.command("update-video")
+@click.argument("id", type=click.STRING, required=True)
+@click.argument("title", type=click.STRING, required=False)
+@click.argument("description", type=click.STRING, required=False)
+@click.argument("url", type=click.STRING, required=False)
+def update(id, title=None, description=None, url=None):
+    """Update video infor on database"""
+    result = update_video(id, title, description, url)
+    result_get = get_video_by_id(id)
+    print(result)
+    click.echo(result_get)
+
+    
 def configure(app: Flask):
     app.cli.add_command(controller)
