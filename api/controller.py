@@ -32,7 +32,6 @@ def add_new_video(title, description, url):
             "url": url,
         }
     )
-
     conn.exec_driver_sql(
         """\
         INSERT INTO video (title, description , url)
@@ -40,20 +39,39 @@ def add_new_video(title, description, url):
         """,
         video,
     )
-
     conn.commit()
 
     return "created with success"
 
 
 def update_video(video_id, title, description, url):
-    """Update video infor on database"""
-    ...
+    """Update video info on database"""
 
-    return "created with success"
+    video = dict(
+        {            
+            "title": title,
+            "description": description,
+            "url": url,            
+        }
+    )        
+
+    for key, value in video.items():
+        if value:            
+            conn.exec_driver_sql(
+            """\
+            UPDATE video 
+            SET {column} = {value}
+            WHERE id = {id};
+            """.format(column=key, value=(f"'{value}'") ,id=video_id)        
+        )
+
+    conn.commit()
+
+    return "updated with success"
 
 
 def delete_video(video_id=None):
     """Delete one video by id or all videos on database"""
     conn.exec_driver_sql(f"DELETE FROM video WHERE id={video_id};")
+    conn.commit()
     return "delete success"
