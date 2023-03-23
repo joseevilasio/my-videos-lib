@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, redirect, url_for
+from flask import Blueprint, Flask, redirect, url_for, abort
 
 from api.controller import (
     add_new_video,
@@ -13,7 +13,7 @@ bp = Blueprint("api", __name__)
 
 @bp.route("/")
 def index():
-    return "api - lib videos"
+    return ""
 
 
 @bp.route("/videos")
@@ -25,26 +25,32 @@ def list_videos():
 @bp.route("/videos/<int:video_id>")
 def one_video(video_id):
     video = get_video_by_id(video_id)
+    if not video:
+        return abort(404)
     return video
 
 
-@bp.route("/videos/<int:video_id>")
+@bp.route("/videos/<int:video_id>", methods=["DELETE"])
 def delete_one_video(video_id):
-    video = delete_video(video_id)
-    return video
+    video = get_video_by_id(video_id)
+    if not video:
+        return abort(404)
+    else:
+        exec_video = delete_video(video_id)
+        return exec_video
 
 
 @bp.route("/videos/new", methods=["GET", "POST"])
-def new_video(title, description, url):
+def new_video(**data):
     # TODO: Feature futura
-    video = add_new_video(title, description, url)
+    video = add_new_video(**data)
     return video
 
 
-@bp.route("/videos/<int:video_id>", methods=["GET", "POST"])
-def update_data_video(video_id, title, description, url):
+@bp.route("/videos/<int:video_id>", methods=["PUT"])
+def update_data_video(video_id, **data):
     # TODO: Atualizar com construção de dados
-    video = update_video(video_id, title, description, url)
+    video = update_video(video_id, **data)
     updated = redirect(url_for("api.one_video", video_id=video_id))
     return video, updated
 

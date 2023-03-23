@@ -16,20 +16,17 @@ def get_video_by_id(video_id):
 
     fields = ("id", "title", "description", "url")
     query = conn.exec_driver_sql(f"SELECT * FROM video WHERE id = {video_id};")
-    result_query = [dict(zip(fields, video)) for video in query]
-    if result_query:
-        return result_query
-    else:
-        return f"not found: {video_id}"
+    result_query = [dict(zip(fields, video)) for video in query]    
+    return result_query    
 
 
-def add_new_video(title, description, url):
+def add_new_video(**data):
     """Add new video on database"""
     video = dict(
         {
-            "title": title,
-            "description": description,
-            "url": url,
+            "title": data["title"],
+            "description": data["description"],
+            "url": data["url"],
         }
     )
     conn.exec_driver_sql(
@@ -44,14 +41,14 @@ def add_new_video(title, description, url):
     return "created with success"
 
 
-def update_video(video_id, title, description, url):
+def update_video(video_id, **data):
     """Update video info on database"""
 
     video = dict(
         {
-            "title": title,
-            "description": description,
-            "url": url,
+            "title": data["title"],
+            "description": data["description"],
+            "url": data["url"],
         }
     )
 
