@@ -61,6 +61,6 @@ def update(id, title=None, description=None, url=None):
     print(result)
     click.echo(result_get)
 
-    
+
 def configure(app: Flask):
     app.cli.add_command(controller)

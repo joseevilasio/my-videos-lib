@@ -1,16 +1,11 @@
-from flask import (
-    Flask,
-    Blueprint,
-    url_for,
-    redirect,
-)
+from flask import Blueprint, Flask, redirect, url_for
 
 from api.controller import (
+    add_new_video,
+    delete_video,
     get_all_videos,
     get_video_by_id,
-    add_new_video,
     update_video,
-    delete_video
 )
 
 bp = Blueprint("api", __name__)
@@ -18,7 +13,7 @@ bp = Blueprint("api", __name__)
 
 @bp.route("/")
 def index():
-    return f"api - lib videos"
+    return "api - lib videos"
 
 
 @bp.route("/videos")
@@ -34,7 +29,7 @@ def one_video(video_id):
 
 
 @bp.route("/videos/<int:video_id>")
-def delete_video(video_id):
+def delete_one_video(video_id):
     video = delete_video(video_id)
     return video
 

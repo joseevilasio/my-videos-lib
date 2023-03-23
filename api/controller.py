@@ -48,22 +48,24 @@ def update_video(video_id, title, description, url):
     """Update video info on database"""
 
     video = dict(
-        {            
+        {
             "title": title,
             "description": description,
-            "url": url,            
+            "url": url,
         }
-    )        
+    )
 
     for key, value in video.items():
-        if value:            
+        if value:
             conn.exec_driver_sql(
-            """\
-            UPDATE video 
+                """\
+            UPDATE video
             SET {column} = {value}
             WHERE id = {id};
-            """.format(column=key, value=(f"'{value}'") ,id=video_id)        
-        )
+            """.format(
+                    column=key, value=(f"'{value}'"), id=video_id
+                )
+            )
 
     conn.commit()
 
