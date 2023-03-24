@@ -1,0 +1,82 @@
+# .github/workflows/main.yml
+name: CI
+
+on: 
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+
+  workflow_dispatch:
+
+
+jobs:
+  lint:
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ['3.10']
+        os: [ubuntu-latest]
+    runs-on: ${{matrix.os}}
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{matrix.python-version}} 
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install Project 
+        run: poetry install
+
+      - name: Look for style errors
+        run: poetry run pflake8
+
+      - name: Check for in importing style
+        run: poetry run isort --profile=black  api tests
+
+      - name: Look for auto format errors
+        run: poetry run black --check --diff api tests
+
+  tests:
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10']
+        os: [ubuntu-latest]
+    runs-on: ${{matrix.os}}
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2      
+        with:
+          python-version: ${{matrix.python-version}}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Install Project 
+        run: poetry install
+
+      - name: Run tests         
+        run: poetry run pytest -v --junitxml=test-result.xml
+
+      - name: publish junit results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: test-result.xml
+          check_name: Test Result (Python ${{matrix.python-version}})
