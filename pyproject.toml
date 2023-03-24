@@ -43,7 +43,7 @@ license = "unlicensed"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 flask = "^2.2.3"
 dynaconf = "^3.1.12"
 flask-sqlalchemy = "^3.0.3"
