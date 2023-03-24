@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, redirect, url_for, abort
+from flask import Blueprint, Flask, abort, redirect, url_for
 
 from api.controller import (
     add_new_video,

@@ -16,8 +16,8 @@ def get_video_by_id(video_id):
 
     fields = ("id", "title", "description", "url")
     query = conn.exec_driver_sql(f"SELECT * FROM video WHERE id = {video_id};")
-    result_query = [dict(zip(fields, video)) for video in query]    
-    return result_query    
+    result_query = [dict(zip(fields, video)) for video in query]
+    return result_query
 
 
 def add_new_video(**data):

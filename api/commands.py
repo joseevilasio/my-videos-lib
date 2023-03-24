@@ -25,7 +25,7 @@ def show():
 @controller.command("show-by-id")
 @click.argument("id")
 def show_one(id, type=click.STRING, required=True):
-    """List only one video by id"""    
+    """List only one video by id"""
     result = get_video_by_id(id)
     click.echo(result or "not found")
 
