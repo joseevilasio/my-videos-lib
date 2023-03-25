@@ -1,3 +1,4 @@
+[![CI](https://github.com/joseevilasio/CRUD-Challenge-Alura/actions/workflows/main.yml/badge.svg)](https://github.com/joseevilasio/CRUD-Challenge-Alura/actions/workflows/main.yml)
 # CRUD - Alura Challenge
 
 
