@@ -72,7 +72,7 @@ jobs:
         run: poetry install
 
       - name: Run tests         
-        run: poetry run pytest -v --junitxml=test-result.xml
+        run: poetry run pytest -v --junitxml=test-results.xml
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
