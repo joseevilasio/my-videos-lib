@@ -13,7 +13,7 @@ bp = Blueprint("api", __name__)
 
 @bp.route("/")
 def index():
-    return ""
+    return "Hello, World! MyVideos API", 200
 
 
 @bp.route("/videos")

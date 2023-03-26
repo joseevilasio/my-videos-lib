@@ -22,6 +22,7 @@ def get_video_by_id(video_id):
 
 def add_new_video(**data):
     """Add new video on database"""
+
     video = dict(
         {
             "title": data["title"],
@@ -29,6 +30,7 @@ def add_new_video(**data):
             "url": data["url"],
         }
     )
+
     conn.exec_driver_sql(
         """\
         INSERT INTO video (title, description , url)
@@ -71,6 +73,8 @@ def update_video(video_id, **data):
 
 def delete_video(video_id=None):
     """Delete one video by id or all videos on database"""
+
     conn.exec_driver_sql(f"DELETE FROM video WHERE id={video_id};")
     conn.commit()
+
     return "delete success"
