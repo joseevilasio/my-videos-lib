@@ -21,7 +21,7 @@ def test_list_videos_positive(client):
     assert response.status_code == 200
 
 
-def test_one_video_positive(engine):
+def test_one_video_positive_data(engine, client):
     """Test to check if one video route is return OK"""
 
     with engine.connect() as conn:
@@ -49,5 +49,15 @@ def test_one_video_positive(engine):
             videos,
         )
         conn.commit()
+
         result = conn.exec_driver_sql("SELECT * FROM video;").fetchone()
-        assert result is not None
+
+        
+        response_1 = client.get("/videos/1")
+        response_2 = client.get("/videos/2")
+
+        assert result is not None        
+        assert response_1.status_code == 200
+        assert response_1.status_code == 200
+        assert b"Engenheiro de software" in response_1.data
+        assert b"Estrutura de dados" in response_2.data

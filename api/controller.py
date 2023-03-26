@@ -1,4 +1,5 @@
 from api.database import conn
+import json
 
 
 def get_all_videos():
@@ -20,41 +21,31 @@ def get_video_by_id(video_id):
     return result_query
 
 
-def add_new_video(**data):
-    """Add new video on database"""
+def add_new_video(data):
+    """Add new video on database"""    
 
-    video = dict(
-        {
-            "title": data["title"],
-            "description": data["description"],
-            "url": data["url"],
-        }
-    )
+    with open(data, encoding="utf-8") as data_json:
+        _data = json.load(data_json)   
 
     conn.exec_driver_sql(
         """\
         INSERT INTO video (title, description , url)
         VALUES (:title, :description, :url);
         """,
-        video,
+        _data,
     )
     conn.commit()
 
     return "created with success"
 
 
-def update_video(video_id, **data):
+def update_video(video_id, data):
     """Update video info on database"""
 
-    video = dict(
-        {
-            "title": data["title"],
-            "description": data["description"],
-            "url": data["url"],
-        }
-    )
+    with open(data, encoding="utf-8") as data_json:
+        _data = json.load(data_json) 
 
-    for key, value in video.items():
+    for key, value in _data.items():
         if value:
             conn.exec_driver_sql(
                 """\

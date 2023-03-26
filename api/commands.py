@@ -31,12 +31,10 @@ def show_one(id, type=click.STRING, required=True):
 
 
 @controller.command("new-video")
-@click.argument("title", type=click.STRING, required=True)
-@click.argument("description", type=click.STRING, required=True)
-@click.argument("url", type=click.STRING, required=True)
-def new_video(title, description, url):
+@click.argument("data", required=True)
+def new_video(data):
     """Add new video on database"""
-    result = add_new_video(title, description, url)
+    result = add_new_video(data)
     # TODO: Adicionar retorno com os dados do video adicionado
     print(result)
 
@@ -51,12 +49,10 @@ def delete(id):
 
 @controller.command("update-video")
 @click.argument("id", type=click.STRING, required=True)
-@click.argument("title", type=click.STRING, required=False)
-@click.argument("description", type=click.STRING, required=False)
-@click.argument("url", type=click.STRING, required=False)
-def update(id, title=None, description=None, url=None):
+@click.argument("data", required=False)
+def update(id, data):
     """Update video infor on database"""
-    result = update_video(id, title, description, url)
+    result = update_video(id, data)
     result_get = get_video_by_id(id)
     print(result)
     click.echo(result_get)
