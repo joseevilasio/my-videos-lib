@@ -1,11 +1,11 @@
-import pytest
 import warnings
 from unittest.mock import patch
-from sqlmodel import create_engine
-from api import model
+
+import pytest
 from sqlalchemy.exc import SAWarning
+from sqlmodel import create_engine
 
-
+from api import model
 from api.app import create_app
 
 

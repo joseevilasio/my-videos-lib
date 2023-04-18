@@ -1,9 +1,9 @@
+from sqlmodel import select
+
 from api.controller import add_new_video
 from api.database import get_session
 from api.model import Video
 from tests.constants import VIDEO_FILE, VIDEO_FILE_2
-
-from sqlmodel import select
 
 
 def test_index_positive(client):
@@ -39,7 +39,6 @@ def test_one_video_positive_data(client):
     """Test to check if one video route is return OK"""
 
     with get_session() as session:
-        
         add_new_video(VIDEO_FILE)
         add_new_video(VIDEO_FILE_2)
 
