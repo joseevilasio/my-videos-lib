@@ -6,7 +6,7 @@ testpaths = [
 ]
 
 [tool.flake8]
-exclude = [".venv", "build", ".vscodelocal", "migrations"]
+exclude = [".venv", "build", ".vscodelocal", "migrations", "./test.py"]
 max-line-length = 79
 # extend-ignore = "W293,"
 
@@ -43,10 +43,11 @@ license = "unlicensed"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.8.1"
 flask = "^2.2.3"
 dynaconf = "^3.1.12"
 flask-sqlalchemy = "^3.0.3"
+sqlmodel = "^0.0.8"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -57,6 +58,7 @@ pytest = "^7.2.2"
 pyproject-flake8 = "^6.0.0.post1"
 pytest-cov = "^4.0.0"
 pytest-flask = "^1.2.0"
+pytest-forked = "^1.6.0"
 
 [build-system]
 requires = ["poetry-core"]

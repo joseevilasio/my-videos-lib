@@ -14,7 +14,7 @@ set-app:
 	@export FLASK_APP=api.app:create_app FLASK_ENV=development
 
 test:
-	@poetry run pytest -s
+	@poetry run pytest -s --forked
 
 code-coverage:
 	@poetry run pytest --cov-report html --cov . 
