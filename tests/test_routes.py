@@ -1,3 +1,7 @@
+from api.controller import add_new_video
+from tests.constants import VIDEO_FILE, VIDEO_FILE_2
+
+
 def test_index_positive(client):
     """Test to check if index route is return OK"""
 
@@ -25,39 +29,41 @@ def test_one_video_positive_data(engine, client):
     """Test to check if one video route is return OK"""
 
     with engine.connect() as conn:
-        videos = [
-            {
-                "title": """Engenheiro de software ou Programador?
-                com Paulo Silveira""",
-                "description": """Engenheiro de software, pessoa que
-                programa ou dev, o que você é?""",
-                "url": "https://www.youtube.com/watch?v=Gm6U-AxXEQ0",
-            },
-            {
-                "title": "Estrutura de dados com Roberta Arcoverde",
-                "description": """O que são estrutura de dados e como
-                podem ser aplicadas na programação?""",
-                "url": "https://www.youtube.com/watch?v=57VqgNjbzrg",
-            },
-        ]
+        # videos = [
+        #     {
+        #         "title": """Engenheiro de software ou Programador?
+        #         com Paulo Silveira""",
+        #         "description": """Engenheiro de software, pessoa que
+        #         programa ou dev, o que você é?""",
+        #         "url": "https://www.youtube.com/watch?v=Gm6U-AxXEQ0",
+        #     },
+        #     {
+        #         "title": "Estrutura de dados com Roberta Arcoverde",
+        #         "description": """O que são estrutura de dados e como
+        #         podem ser aplicadas na programação?""",
+        #         "url": "https://www.youtube.com/watch?v=57VqgNjbzrg",
+        #     },
+        # ]
 
-        conn.exec_driver_sql(
-            """\
-                INSERT INTO video(title, description, url)
-                VALUES (:title, :description, :url);
-                """,
-            videos,
-        )
-        conn.commit()
+        # conn.exec_driver_sql(
+        #     """\
+        #         INSERT INTO video(title, description, url)
+        #         VALUES (:title, :description, :url);
+        #         """,
+        #     videos,
+        # )
+        # conn.commit()
+
+        add_new_video(VIDEO_FILE)
+        add_new_video(VIDEO_FILE_2)
 
         result = conn.exec_driver_sql("SELECT * FROM video;").fetchone()
 
-        
         response_1 = client.get("/videos/1")
         response_2 = client.get("/videos/2")
 
-        assert result is not None        
+        assert result is not None
         assert response_1.status_code == 200
         assert response_1.status_code == 200
-        assert b"Engenheiro de software" in response_1.data
-        assert b"Estrutura de dados" in response_2.data
+        assert b"Git e Github para iniciantes" in response_1.data
+        assert b"https://www.youtube.com/watch?v=DEF456" in response_2.data

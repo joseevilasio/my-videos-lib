@@ -1,9 +1,6 @@
-[  {    "title": "Git e Github para iniciantes",
-        "description": "Aprenda a usar o Git e Github com os cursos da Alura",
-        "url": "https://www.youtube.com/watch?v=ABC123"
-    },
-  {     "title": "Introdução à programação em Java",
-        "description": "Comece a aprender Java com a Alura",
-        "url": "https://www.youtube.com/watch?v=DEF456"
-    }
-]
+{       
+    "title": "Introdução à programação em Go",
+    "description": "Comece a aprender Go com a Alura",
+    "url": "https://www.youtube.com/watch?v=8485663"
+}
+
