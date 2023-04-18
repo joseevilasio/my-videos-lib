@@ -1,5 +1,9 @@
 from api.controller import add_new_video
+from api.database import get_session
+from api.model import Video
 from tests.constants import VIDEO_FILE, VIDEO_FILE_2
+
+from sqlmodel import select
 
 
 def test_index_positive(client):
@@ -21,43 +25,25 @@ def test_route_negative(client):
 def test_list_videos_positive(client):
     """Test to check if list videos route is return OK"""
 
+    add_new_video(VIDEO_FILE)
+
+    with get_session() as session:
+        result = session.exec(select(Video)).first()
+
     response = client.get("/videos")
+    assert result is not None
     assert response.status_code == 200
 
 
-def test_one_video_positive_data(engine, client):
+def test_one_video_positive_data(client):
     """Test to check if one video route is return OK"""
 
-    with engine.connect() as conn:
-        # videos = [
-        #     {
-        #         "title": """Engenheiro de software ou Programador?
-        #         com Paulo Silveira""",
-        #         "description": """Engenheiro de software, pessoa que
-        #         programa ou dev, o que você é?""",
-        #         "url": "https://www.youtube.com/watch?v=Gm6U-AxXEQ0",
-        #     },
-        #     {
-        #         "title": "Estrutura de dados com Roberta Arcoverde",
-        #         "description": """O que são estrutura de dados e como
-        #         podem ser aplicadas na programação?""",
-        #         "url": "https://www.youtube.com/watch?v=57VqgNjbzrg",
-        #     },
-        # ]
-
-        # conn.exec_driver_sql(
-        #     """\
-        #         INSERT INTO video(title, description, url)
-        #         VALUES (:title, :description, :url);
-        #         """,
-        #     videos,
-        # )
-        # conn.commit()
-
+    with get_session() as session:
+        
         add_new_video(VIDEO_FILE)
         add_new_video(VIDEO_FILE_2)
 
-        result = conn.exec_driver_sql("SELECT * FROM video;").fetchone()
+        result = session.exec(select(Video)).first()
 
         response_1 = client.get("/videos/1")
         response_2 = client.get("/videos/2")
@@ -66,4 +52,4 @@ def test_one_video_positive_data(engine, client):
         assert response_1.status_code == 200
         assert response_1.status_code == 200
         assert b"Git e Github para iniciantes" in response_1.data
-        assert b"https://www.youtube.com/watch?v=DEF456" in response_2.data
+        assert b"https://www.youtube.com/watch?v=8485663" in response_2.data
