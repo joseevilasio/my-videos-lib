@@ -1,40 +1,53 @@
-from api.database import conn
-import json
+from flask import json, jsonify
+from sqlmodel import select
+
+from api.database import get_session
+from api.model import Video
 
 
 def get_all_videos():
     """Get all videos from database and list information"""
 
-    fields = ("id", "title", "description", "url")
-    query = conn.exec_driver_sql("SELECT * FROM video;")
-    results = [dict(zip(fields, video)) for video in query]
-    # Atenção para serializar para json
-    return results
+    with get_session() as session:
+        query = session.exec(select(Video)).fetchall()
+        if query:
+            results = [video.to_dict() for video in query]
+        else:
+            return None
+
+    return jsonify(results)
 
 
 def get_video_by_id(video_id):
     """Get video by id from database and list information"""
 
-    fields = ("id", "title", "description", "url")
-    query = conn.exec_driver_sql(f"SELECT * FROM video WHERE id = {video_id};")
-    result_query = [dict(zip(fields, video)) for video in query]
-    return result_query
+    with get_session() as session:
+        query = session.exec(select(Video).where(Video.id == video_id)).first()
+        if query:
+            results = query.to_dict()
+        else:
+            return None
+
+    return jsonify(results)
 
 
 def add_new_video(data):
-    """Add new video on database"""    
+    """Add new video on database"""
 
     with open(data, encoding="utf-8") as data_json:
-        _data = json.load(data_json)   
+        _data = json.load(data_json)
 
-    conn.exec_driver_sql(
-        """\
-        INSERT INTO video (title, description , url)
-        VALUES (:title, :description, :url);
-        """,
-        _data,
-    )
-    conn.commit()
+    with get_session() as session:
+        if type(_data) == list:
+            for item in _data:
+                new = Video(**item)
+                session.add(new)
+
+        elif type(_data) == dict:
+            new = Video(**_data)
+            session.add(new)
+
+        session.commit()
 
     return "created with success"
 
@@ -43,21 +56,21 @@ def update_video(video_id, data):
     """Update video info on database"""
 
     with open(data, encoding="utf-8") as data_json:
-        _data = json.load(data_json) 
+        _data = json.load(data_json)
 
-    for key, value in _data.items():
-        if value:
-            conn.exec_driver_sql(
-                """\
-            UPDATE video
-            SET {column} = {value}
-            WHERE id = {id};
-            """.format(
-                    column=key, value=(f"'{value}'"), id=video_id
-                )
-            )
+    # TODO: Validator data
 
-    conn.commit()
+    with get_session() as session:
+        video = session.exec(select(Video).where(Video.id == video_id)).one()
+
+        for key, value in _data.items():
+            if key == "title":
+                video.title = value
+            if key == "description":
+                video.description = value
+            if key == "url":
+                video.url = value
+        session.commit()
 
     return "updated with success"
 
@@ -65,7 +78,9 @@ def update_video(video_id, data):
 def delete_video(video_id=None):
     """Delete one video by id or all videos on database"""
 
-    conn.exec_driver_sql(f"DELETE FROM video WHERE id={video_id};")
-    conn.commit()
+    with get_session() as session:
+        query = session.exec(select(Video).where(Video.id == video_id)).one()
+        session.delete(query)
+        session.commit()
 
     return "delete success"
