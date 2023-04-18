@@ -19,6 +19,8 @@ def index():
 @bp.route("/videos")
 def list_videos():
     videos = get_all_videos()
+    if not videos:
+        return abort(404)
     return videos
 
 
