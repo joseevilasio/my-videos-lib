@@ -1,3 +1,4 @@
+from flask import json
 from sqlmodel import select
 
 from api.controller import add_new_video
@@ -58,10 +59,9 @@ def test_delete_one_video(client):
     """Test to check if delete one video route is return OK"""
 
     with get_session() as session:
-
         add_new_video(VIDEO_FILE)
 
-        result_after = session.exec(select(Video)).first()        
+        result_after = session.exec(select(Video)).first()
         assert result_after is not None
 
         response_delete = client.delete("/videos/1")
@@ -69,6 +69,66 @@ def test_delete_one_video(client):
 
         result_before = session.exec(select(Video)).first()
 
-        assert result_before == None
+        assert result_before is None
         assert response_delete.status_code == 200
         assert response_get.status_code == 404
+
+
+def test_new_video(client):
+    """Test to check if new video route is return OK"""
+
+    with get_session() as session:
+        response_post = client.post("/videos/new", json=VIDEO_FILE)
+        response_get = client.get("/videos/1")
+
+        result_before = session.exec(select(Video)).first()
+
+        assert result_before is not None
+        assert response_post.status_code == 200
+        assert response_get.status_code == 200
+        assert b"https://www.youtube.com/watch?v=ABC123" in response_get.data
+
+
+def test_update_data_video(client):
+    """Test to check if update video route is return OK"""
+
+    with get_session() as session:
+        add_new_video(VIDEO_FILE)
+        result_after = session.exec(select(Video)).first()
+        assert result_after is not None
+
+        data = {
+            "title": "Aprenda GIT/GITHUB em 15 minutos",
+            "description": """Aprenda a usar o Git e Github com os cursos da
+            Alura""",
+            "url": "https://www.youtube.com/watch?v=ABC123",
+        }
+
+        response_put = client.put("/videos/1", json=json.dumps(data))
+
+        result_before = session.exec(select(Video.title)).first()
+
+        assert result_before == "Aprenda GIT/GITHUB em 15 minutos"
+        assert response_put.status_code == 200
+        assert b"updated with success" in response_put.data
+
+
+def test_update_partial_video(client):
+    """Test to check if update partial video route is return OK"""
+
+    with get_session() as session:
+        add_new_video(VIDEO_FILE)
+        result_after = session.exec(select(Video)).first()
+        assert result_after is not None
+
+        data = {
+            "title": "Aprenda GIT/GITHUB em 15 minutos",
+        }
+
+        response_patch = client.patch("/videos/1", json=json.dumps(data))
+
+        result_before = session.exec(select(Video.title)).first()
+
+        assert result_before == "Aprenda GIT/GITHUB em 15 minutos"
+        assert response_patch.status_code == 200
+        assert b"updated with success" in response_patch.data

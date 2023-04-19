@@ -55,21 +55,18 @@ def add_new_video(data):
 def update_video(video_id, data):
     """Update video info on database"""
 
-    with open(data, encoding="utf-8") as data_json:
-        _data = json.load(data_json)
-
-    # TODO: Validator data
-
     with get_session() as session:
         video = session.exec(select(Video).where(Video.id == video_id)).one()
+        data_dict = json.loads(data)
 
-        for key, value in _data.items():
+        for key, value in data_dict.items():
             if key == "title":
                 video.title = value
             if key == "description":
                 video.description = value
             if key == "url":
                 video.url = value
+
         session.commit()
 
     return "updated with success"

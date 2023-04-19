@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, abort, redirect, url_for
+from flask import Blueprint, Flask, abort, request
 
 from api.controller import (
     add_new_video,
@@ -42,19 +42,25 @@ def delete_one_video(video_id):
         return exec_video
 
 
-@bp.route("/videos/new", methods=["GET", "POST"])
-def new_video(**data):
-    # TODO: Feature futura
-    video = add_new_video(**data)
+@bp.route("/videos/new", methods=["POST", "GET"])
+def new_video():
+    data = request.get_json()
+    video = add_new_video(data)
     return video
 
 
-@bp.route("/videos/<int:video_id>", methods=["PUT"])
-def update_data_video(video_id, **data):
-    # TODO: Atualizar com construção de dados
-    video = update_video(video_id, **data)
-    updated = redirect(url_for("api.one_video", video_id=video_id))
-    return video, updated
+@bp.route("/videos/<int:video_id>", methods=["PUT", "GET"])
+def update_data_video(video_id):
+    data = request.get_json()
+    video = update_video(video_id, data)
+    return video
+
+
+@bp.route("/videos/<int:video_id>", methods=["PATCH", "GET"])
+def update_partial_video(video_id):
+    data = request.get_json()
+    video = update_video(video_id, data)
+    return video
 
 
 def configure(app: Flask):
