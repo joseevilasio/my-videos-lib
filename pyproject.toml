@@ -1,0 +1,65 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q -vv"
+testpaths = [
+    "tests",
+]
+
+[tool.flake8]
+exclude = [".venv", "build", ".vscodelocal", "migrations", "./test.py"]
+max-line-length = 79
+# extend-ignore = "W293,"
+
+[tool.black]
+line-length = 79
+target-version = ["py36", "py37", "py39", "py310"]
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.venv
+  | _build
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+[tool.isort]
+profile = "black"
+src_paths = ["api", "tests"]
+multi_line_output = 3  # VHI
+line_length = 79
+force_grid_wrap = 0
+use_parentheses = true
+include_trailing_comma = true
+
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = "CRUD API"
+authors = ["Jose Junior"]
+license = "unlicensed"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+flask = "^2.2.3"
+dynaconf = "^3.1.12"
+flask-sqlalchemy = "^3.0.3"
+sqlmodel = "^0.0.8"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+pytest = "^7.2.2"
+pyproject-flake8 = "^6.0.0.post1"
+pytest-cov = "^4.0.0"
+pytest-flask = "^1.2.0"
+pytest-forked = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
