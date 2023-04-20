@@ -6,6 +6,11 @@ from api.controller import (
     get_all_videos,
     get_video_by_id,
     update_video,
+    add_new_category,
+    delete_category,
+    get_all_category,
+    get_category_by_id,
+    update_category,
 )
 
 bp = Blueprint("api", __name__)
@@ -61,6 +66,56 @@ def update_partial_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
     return video
+
+
+# Category routes
+
+
+@bp.route("/category")
+def list_category():
+    category = get_all_category()
+    if not category:
+        return abort(404)
+    return category
+
+
+@bp.route("/category/<int:category_id>")
+def one_category(category_id):
+    category = get_category_by_id(category_id)
+    if not category:
+        return abort(404)
+    return category
+
+
+@bp.route("/category/<int:category_id>", methods=["DELETE"])
+def delete_one_category(category_id):
+    category = get_category_by_id(category_id)
+    if not category:
+        return abort(404)
+    else:
+        exec_category = delete_category(category_id)
+        return exec_category
+
+
+@bp.route("/category/new", methods=["POST", "GET"])
+def new_category():
+    data = request.get_json()
+    category = add_new_category(data)
+    return category
+
+
+@bp.route("/category/<int:category_id>", methods=["PUT", "GET"])
+def update_data_category(category_id):
+    data = request.get_json()
+    category = update_video(category_id, data)
+    return category
+
+
+@bp.route("/category/<int:category_id>", methods=["PATCH", "GET"])
+def update_partial_category(category_id):
+    data = request.get_json()
+    category = update_category(category_id, data)
+    return category
 
 
 def configure(app: Flask):
