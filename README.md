@@ -3,7 +3,7 @@
 
 
 
-| :placard: Vitrine.Dev |   https://cursos.alura.com.br/vitrinedev/joseevilasio/project/CRUD-Challenge-Alura/3844433 |
+| :placard: Vitrine.Dev |   [Vitrine Dev José Junior](https://cursos.alura.com.br/vitrinedev/joseevilasio/project/CRUD-Challenge-Alura/3844433) |
 | -------------  | --- |
 | :sparkles: Nome        | **Challenge Alura - REST API - CRUD**
 | :label: Tecnologias | python, flask, sqlite
@@ -22,7 +22,7 @@ Exemplo: Não iniciado ❌ / Iniciado ✅
 ## Semana 1 - Implementando uma API REST ✅
 **Implementação inicial:** Modelar o bando de dados conforme regra de neǵocio e roteamento. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/1#issue-1629409758]
 
-## Semana 2 - Adicionando entidades e relacionamentos ❌
+## Semana 2 - Adicionando entidades e relacionamentos  ✅
 **Implementação de Categorias:** Adicionar table em database com categoria e relacionar com database já existente e rotear novas rotas.  🔍[https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/2#issue-1629629636]
 
 ## Semana 3 - Implementando serviços de autenticação ❌
