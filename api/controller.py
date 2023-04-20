@@ -63,9 +63,11 @@ def update_video(video_id, data):
             if key == "title":
                 video.title = value
             if key == "description":
-                video.description = value
+                video.description = value            
             if key == "url":
                 video.url = value
+            if key == "category_id":
+                video.description = value
 
         session.commit()
 
