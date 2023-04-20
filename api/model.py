@@ -21,7 +21,7 @@ class Video(SQLModel, table=True):
             "title": self.title,
             "description": self.description,
             "url": self.url,
-            "category_id": self.category_id
+            "category_id": self.category_id,
         }
 
 
