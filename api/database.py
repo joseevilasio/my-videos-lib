@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, create_engine
+
 from api import model
 
 db = SQLAlchemy()

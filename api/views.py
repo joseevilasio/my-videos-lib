@@ -1,16 +1,16 @@
 from flask import Blueprint, Flask, abort, request
 
 from api.controller import (
-    add_new_video,
-    delete_video,
-    get_all_videos,
-    get_video_by_id,
-    update_video,
     add_new_category,
+    add_new_video,
     delete_category,
+    delete_video,
     get_all_category,
+    get_all_videos,
     get_category_by_id,
+    get_video_by_id,
     update_category,
+    update_video,
 )
 
 bp = Blueprint("api", __name__)
