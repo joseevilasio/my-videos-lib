@@ -1,8 +1,7 @@
 [![CI](https://github.com/joseevilasio/CRUD-Challenge-Alura/actions/workflows/main.yml/badge.svg)](https://github.com/joseevilasio/CRUD-Challenge-Alura/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/joseevilasio/CRUD-Challenge-Alura/graph/badge.svg?token=VK8Z1CJZ6J)](https://codecov.io/gh/joseevilasio/CRUD-Challenge-Alura)
 
 # MY VIDEOS LIB - CRUD - ALURA CHALLENGE 
-
-
 
 | :placard: Vitrine.Dev |   [Vitrine Dev José Junior](https://cursos.alura.com.br/vitrinedev/joseevilasio/project/CRUD-Challenge-Alura/3844433) |
 | -------------  | --- |
