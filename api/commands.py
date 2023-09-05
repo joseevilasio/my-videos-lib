@@ -1,3 +1,5 @@
+import json
+
 import click
 from flask import Flask
 
@@ -12,7 +14,7 @@ from api.controller import (
 
 @click.group()
 def controller():
-    """Manage api"""
+    """Manage MyVideosLIB API"""
 
 
 @controller.command("show")
@@ -23,39 +25,42 @@ def show():
 
 
 @controller.command("show-by-id")
-@click.argument("id")
-def show_one(id, type=click.STRING, required=True):
+@click.argument("id", type=click.STRING, required=True)
+def show_one(id):
     """List only one video by id"""
-    result = get_video_by_id(id)
-    click.echo(result or "not found")
+    click.echo(get_video_by_id(int(id)))
 
 
 @controller.command("new-video")
 @click.argument("data", required=True)
 def new_video(data):
     """Add new video on database"""
-    result = add_new_video(data)
-    # TODO: Adicionar retorno com os dados do video adicionado
-    print(result)
+
+    with open(data, "r") as data_json:
+        data_dict = json.load(data_json)
+
+    result = add_new_video(data_dict)
+    click.echo(get_video_by_id(result))
 
 
 @controller.command("delete")
 @click.argument("id", type=click.STRING, required=True)
 def delete(id):
-    """Delete one video by id or all videos on database"""
-    result = delete_video(id)
-    print(result)
+    """Delete one video by id"""
+    result = delete_video(int(id))
+    click.echo(result)
 
 
 @controller.command("update-video")
-@click.argument("id", type=click.STRING, required=True)
+@click.argument("id", type=click.INT, required=True)
 @click.argument("data", required=False)
 def update(id, data):
     """Update video infor on database"""
-    result = update_video(id, data)
-    result_get = get_video_by_id(id)
-    print(result)
-    click.echo(result_get)
+    with open(data, "r") as data_json:
+        data_dict = json.load(data_json)
+
+    result = update_video(int(id), data_dict)
+    click.echo(get_video_by_id(result))
 
 
 def configure(app: Flask):
