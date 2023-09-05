@@ -1,5 +1,5 @@
 [default]
-SQLALCHEMY_DATABASE_URI = "sqlite:///assets/database.db"
+mongo_uri = "mongodb://localhost:27017/myvideoslib"
 extensions = [
     "api.database:configure",
     "api.commands:configure",
