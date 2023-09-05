@@ -72,13 +72,21 @@ jobs:
         run: poetry install
 
       - name: Run tests         
-        run: poetry run pytest -v --junitxml=test-results.xml
+        run: poetry run pytest -v --forked --junitxml=test-result.xml
+      - name: Run tests CI cov
+        run: make citest
 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+      - name: publish junit results
+        uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
-          files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
-            test-results/**/*.json
+          files: junit/**/*.xml
+          check_name: Test Result (Python ${{matrix.python-version}})
+
+      - name: "Upload coverage to Codecov"
+        if: ${{ matrix.python-version == '3.9' }}
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: true

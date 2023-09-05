@@ -17,7 +17,12 @@ test:
 	@poetry run pytest -s --forked
 
 code-coverage:
-	@poetry run pytest --cov-report html --cov . 
+	@poetry run coverage report
+
+citest:
+	@poetry run py.test -v --cov-config .coveragerc --cov=api -l tests/ --junitxml=junit/test-results.xml
+	@poetry run coverage xml
+	make coverage-report
 
 watch:
 	#@poetry run ptw
