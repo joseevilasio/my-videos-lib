@@ -17,6 +17,9 @@ test:
 	@poetry run pytest -s --forked
 
 code-coverage:
+	@poetry run pytest --cov-report html --cov . 
+
+coverage-report:
 	@poetry run coverage report
 
 citest:
