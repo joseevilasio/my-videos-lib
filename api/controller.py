@@ -28,6 +28,10 @@ def is_valid_url(url):
     return bool(url_pattern.match(url))
 
 
+def regex_case_insensitive(word):
+    return re.compile(f"^{re.escape(word)}$", re.IGNORECASE)
+
+
 def get_all_videos():
     """Get all videos from database and list information"""
     query = mongo.db.videos.find(projection={"_id": False})
@@ -100,86 +104,92 @@ def delete_video(video_id: int):
     raise FileExistsError("Video not found")
 
 
-# Category
+def search_video(search: str):
+    """Search video by string match"""
+    # TODO: Resolver problema de exibição, return vazio
+    # TODO: regex funciona com texto exatamente igual
+    query = mongo.db.videos.find(
+        filter={"title": {"$regex": f"{search}"}}, projection={"_id": False}
+    )
+    print(list(query))
+
+    if query is None:
+        raise FileExistsError(f"Video not found with '{search}'")
+    
+    data = {}
+    for video in query:
+        data[f"{video['id']}"] = video
+    return data
 
 
-# def get_all_category():
-#     """Get all category from database and list information"""
-
-#     with get_session() as session:
-#         query = session.exec(select(Category)).fetchall()
-#         if query:
-#             results = [category.to_dict() for category in query]
-#         else:
-#             return None
-
-#     return jsonify(results)
+# CATEGORY
 
 
-# def get_category_by_id(category_id):
-#     """Get category by id from database and list information"""
+def get_all_category():
+    """Get all category from database and list information"""
 
-#     with get_session() as session:
-#         query = session.exec(
-#             select(Category).where(Category.id == category_id)
-#         ).first()
-#         if query:
-#             results = query.to_dict()
-#         else:
-#             return None
-
-#     return jsonify(results)
+    query = mongo.db.category.find(projection={"_id": False})
+    data = {}
+    for category in query:
+        data[f"{category['id']}"] = category
+    
+    return data
 
 
-# def add_new_category(data):
-#     """Add new category on database"""
+def get_category_by_id(category_id: int):
+    """Get category by id from database and list information"""
 
-#     with open(data, encoding="utf-8") as data_json:
-#         _data = json.load(data_json)
-
-#     with get_session() as session:
-#         if type(_data) == list:
-#             for item in _data:
-#                 new = Category(**item)
-#                 session.add(new)
-
-#         elif type(_data) == dict:
-#             new = Category(**_data)
-#             session.add(new)
-
-#         session.commit()
-
-#     return "created with success"
+    query = mongo.db.category.find_one(
+        {"id": category_id}, projection={"_id": False}
+    )
+    if query is None:
+        raise FileExistsError("Category not found")
+    return query
 
 
-# def update_category(category_id, data):
-#     """Update category info on database"""
+def add_new_category(data: dict):
+    """Add new category on database"""
 
-#     with get_session() as session:
-#         category = session.exec(
-#             select(Category).where(Category.id == category_id)
-#         ).one()
-#         data_dict = json.loads(data)
+    id = get_next_sequence_value("category")
 
-#         for key, value in data_dict.items():
-#             if key == "title":
-#                 category.title = value
-#             if key == "color":
-#                 category.color = value
+    if len(data["title"].replace(" ", "")) <= 0:
+        raise FileExistsError("This field cannot be empty")
 
-#         session.commit()
+    if len(data["color"].replace(" ", "")) <= 0:
+        raise FileExistsError("This field cannot be empty")
 
-#     return "updated with success"
+    mongo.db.category.insert_one(
+        {
+            "id": id,  # insert auto increment
+            "title": data["title"],
+            "color": data["color"],
+        }
+    )
+
+    return id
 
 
-# def delete_category(category_id=None):
-#     """Delete one category by id or all categorys on database"""
+def update_category(category_id: int, data: dict):
+    """Update category info on database"""
 
-#     with get_session() as session:
-#         query = session.exec(
-#             select(Category).where(Category.id == category_id)
-#         ).one()
-#         session.delete(query)
-#         session.commit()
+    query = mongo.db.category.find_one(
+        {"id": category_id}, projection={"_id": False}
+    )
+    if query is None:
+        raise FileExistsError("Category not found")
 
-#     return "delete success"
+    if data.get("title") is None:
+        data["title"] = query["title"]
+    if data.get("color") is None:
+        data["color"] = query["color"]
+
+    mongo.db.category.find_one_and_update({"id": category_id}, {"$set": data})
+    return category_id
+
+
+def delete_category(category_id: int):
+    """Delete one category by id"""
+
+    if mongo.db.category.delete_one({"id": category_id}).deleted_count == 1:
+        return f"Video {category_id} deleted"
+    raise FileExistsError("Category not found")
