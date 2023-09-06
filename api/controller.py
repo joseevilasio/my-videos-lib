@@ -115,7 +115,7 @@ def search_video(search: str):
 
     if query is None:
         raise FileExistsError(f"Video not found with '{search}'")
-    
+
     data = {}
     for video in query:
         data[f"{video['id']}"] = video
@@ -132,7 +132,7 @@ def get_all_category():
     data = {}
     for category in query:
         data[f"{category['id']}"] = category
-    
+
     return data
 
 

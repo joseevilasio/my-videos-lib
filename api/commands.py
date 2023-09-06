@@ -4,17 +4,17 @@ import click
 from flask import Flask
 
 from api.controller import (
+    add_new_category,
     add_new_video,
+    delete_category,
     delete_video,
+    get_all_category,
     get_all_videos,
+    get_category_by_id,
     get_video_by_id,
     search_video,
-    update_video,
-    get_all_category,
-    get_category_by_id,
-    delete_category,
     update_category,
-    add_new_category
+    update_video,
 )
 
 
@@ -78,6 +78,7 @@ def search(search_word):
 
 
 # CATEGORY
+
 
 @controller.command("show-category")
 def show_category():

@@ -1,21 +1,21 @@
-import warnings
-from unittest.mock import patch
+from __future__ import annotations
 
+import pymongo
 import pytest
-from sqlalchemy.exc import SAWarning
-from sqlmodel import create_engine
+from dynaconf import settings
 
-from api import model
-from api.app import create_app
+from tests.src import create_app
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def app():
-    """Instace of Main flask app"""
-    return create_app()
+    app = create_app(FORCE_ENV_FOR_DYNACONF="testing")
+    return app
 
 
-warnings.filterwarnings("ignore", category=SAWarning)
+@pytest.fixture(scope="session", autouse=True)
+def set_test_settings():
+    settings.configure(FORCE_ENV_FOR_DYNACONF="testing")
 
 
 MARKER = """\
@@ -32,21 +32,10 @@ def pytest_configure(config):
         config.addinivalue_line("markers", line)
 
 
-@pytest.fixture(autouse=True)
-def go_to_tmpdir(request):
-    tmpdir = request.getfixturevalue("tmpdir")
-    with tmpdir.as_cwd():
-        yield
-
-
-@pytest.fixture(autouse=True, scope="function")
-def setup_testing_database(request):
-    """For each test, create a database file on tmpdir
-    force database.py to use that filepath.
-    """
-    tmpdir = request.getfixturevalue("tmpdir")
-    test_db = str(tmpdir.join("database.test.db"))
-    engine = create_engine(f"sqlite:///{test_db}")
-    model.SQLModel.metadata.create_all(bind=engine)
-    with patch("api.database.engine", engine):
-        yield
+@pytest.fixture(autouse=True, scope="module")
+def setup_testing_database():
+    """For each test, create a database."""
+    test_client = pymongo.MongoClient("mongodb://localhost:27017/")
+    database_test = test_client["database_test"]
+    yield database_test
+    test_client.drop_database("database_test")
