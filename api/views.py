@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, abort, request
+from flask import Blueprint, Flask, abort, jsonify, redirect, request, url_for
 
 from api.controller import (
     add_new_category,
@@ -9,6 +9,7 @@ from api.controller import (
     get_all_videos,
     get_category_by_id,
     get_video_by_id,
+    search_video,
     update_category,
     update_video,
 )
@@ -18,7 +19,7 @@ bp = Blueprint("api", __name__)
 
 @bp.route("/")
 def index():
-    return "Hello, World! MyVideos API", 200
+    return "Hello, World! MyVideosLIB API", 200
 
 
 @bp.route("/videos")
@@ -26,7 +27,7 @@ def list_videos():
     videos = get_all_videos()
     if not videos:
         return abort(404)
-    return videos
+    return jsonify(videos), 200
 
 
 @bp.route("/videos/<int:video_id>")
@@ -34,7 +35,7 @@ def one_video(video_id):
     video = get_video_by_id(video_id)
     if not video:
         return abort(404)
-    return video
+    return jsonify(video), 200
 
 
 @bp.route("/videos/<int:video_id>", methods=["DELETE"])
@@ -47,28 +48,37 @@ def delete_one_video(video_id):
         return exec_video
 
 
-@bp.route("/videos/new", methods=["POST", "GET"])
+@bp.route("/videos/new", methods=["GET", "POST"])
 def new_video():
     data = request.get_json()
     video = add_new_video(data)
-    return video
+    return redirect(url_for("api.one_video", video_id=video))
 
 
-@bp.route("/videos/<int:video_id>", methods=["PUT", "GET"])
+@bp.route("/videos/<int:video_id>", methods=["GET", "PUT"])
 def update_data_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
-    return video
+    return redirect(url_for("api.one_video", video_id=video))
 
 
-@bp.route("/videos/<int:video_id>", methods=["PATCH", "GET"])
+@bp.route("/videos/<int:video_id>", methods=["GET", "PATCH"])
 def update_partial_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
-    return video
+    return redirect(url_for("api.one_video", video_id=video))
 
 
-# Category routes
+@bp.route("/videos/")
+def search_video_query():
+    search = request.args.get("search")
+    videos = search_video(search)
+    if not videos:
+        return abort(404)
+    return jsonify(videos), 200
+
+
+# CATEGORY ROUTES
 
 
 @bp.route("/category")
@@ -76,7 +86,7 @@ def list_category():
     category = get_all_category()
     if not category:
         return abort(404)
-    return category
+    return jsonify(category), 200
 
 
 @bp.route("/category/<int:category_id>")
@@ -84,7 +94,7 @@ def one_category(category_id):
     category = get_category_by_id(category_id)
     if not category:
         return abort(404)
-    return category
+    return jsonify(category), 200
 
 
 @bp.route("/category/<int:category_id>", methods=["DELETE"])
@@ -97,25 +107,25 @@ def delete_one_category(category_id):
         return exec_category
 
 
-@bp.route("/category/new", methods=["POST", "GET"])
+@bp.route("/category/new", methods=["GET", "POST"])
 def new_category():
     data = request.get_json()
     category = add_new_category(data)
-    return category
+    return redirect(url_for("api.one_category", category_id=category))
 
 
-@bp.route("/category/<int:category_id>", methods=["PUT", "GET"])
+@bp.route("/category/<int:category_id>", methods=["GET", "PUT"])
 def update_data_category(category_id):
     data = request.get_json()
-    category = update_video(category_id, data)
-    return category
+    category = update_category(category_id, data)
+    return redirect(url_for("api.one_category", category_id=category))
 
 
-@bp.route("/category/<int:category_id>", methods=["PATCH", "GET"])
+@bp.route("/category/<int:category_id>", methods=["GET", "PATCH"])
 def update_partial_category(category_id):
     data = request.get_json()
     category = update_category(category_id, data)
-    return category
+    return redirect(url_for("api.one_category", category_id=category))
 
 
 def configure(app: Flask):
