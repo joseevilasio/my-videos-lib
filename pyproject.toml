@@ -46,9 +46,6 @@ readme = "README.md"
 python = "^3.8.1"
 flask = "^2.2.3"
 dynaconf = "^3.1.12"
-flask-sqlalchemy = "^3.0.3"
-sqlmodel = "^0.0.8"
-alembic = "^1.10.3"
 flask-pymongo = "^2.3.0"
 
 
