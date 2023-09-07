@@ -3,7 +3,8 @@ import re
 from api.database import mongo
 
 
-def get_next_sequence_value(db_name):
+def get_next_sequence_value(db_name: str):
+    """Create unique id in each collection"""
     sequence = mongo.db.sequences.find_one_and_update(
         {"_id": db_name},
         {"$inc": {"sequence_value": 1}},
@@ -13,8 +14,8 @@ def get_next_sequence_value(db_name):
     return sequence["sequence_value"]
 
 
-def is_valid_url(url):
-    # Expressão regular para verificar o formato básico da URL
+def is_valid_url(url: str):
+    """Regular expression to check basic URL format"""
     url_pattern = re.compile(
         r"^(https?://)?"  # Protocolo (opcional)
         r"([A-Za-z_0-9.-]+)"  # Nome de host (obrigatório)
@@ -28,8 +29,23 @@ def is_valid_url(url):
     return bool(url_pattern.match(url))
 
 
-def regex_case_insensitive(word):
+def regex_case_insensitive(word: str):
+    """Ignore uppercase, lowercase and accents"""
     return re.compile(f"^{re.escape(word)}$", re.IGNORECASE)
+
+
+def returns_if_category_exists(title: str):
+    """Check if category already exists"""
+    # TODO: Utilizar REGEX para buscar tanto em uppercase como em lowercase
+    query = mongo.db.category.find_one(
+        {"title": f"{title}"}, projection={"_id": False}
+    )
+    if query is not None:
+        return True
+    return False
+
+
+# CONTROLLER VIDEOS
 
 
 def get_all_videos():
@@ -64,6 +80,9 @@ def add_new_video(data: dict):
 
     if is_valid_url(data["url"]) is False:
         raise ValueError("Url is invalid")
+    
+    if len(data["categoryId"]) <= 0:
+        data["categoryId"] = None
 
     mongo.db.videos.insert_one(
         {
@@ -71,6 +90,7 @@ def add_new_video(data: dict):
             "title": data["title"],
             "description": data["description"],
             "url": data["url"],
+            "categoryId": data["categoryId"]
         }
     )
 
@@ -92,6 +112,9 @@ def update_video(video_id: int, data):
         data["description"] = query["description"]
     if data.get("url") is None:
         data["url"] = query["url"]
+    if data.get("categoryId") is None:
+        data["categoryId"] = query["categoryId"]
+
     mongo.db.videos.find_one_and_update({"id": video_id}, {"$set": data})
     return video_id
 
@@ -122,7 +145,7 @@ def search_video(search: str):
     return data
 
 
-# CATEGORY
+# CONTROLLER CATEGORY
 
 
 def get_all_category():
@@ -136,11 +159,11 @@ def get_all_category():
     return data
 
 
-def get_category_by_id(category_id: int):
+def get_category_by_id(categoryId: int):
     """Get category by id from database and list information"""
 
     query = mongo.db.category.find_one(
-        {"id": category_id}, projection={"_id": False}
+        {"id": categoryId}, projection={"_id": False}
     )
     if query is None:
         raise FileExistsError("Category not found")
@@ -154,6 +177,9 @@ def add_new_category(data: dict):
 
     if len(data["title"].replace(" ", "")) <= 0:
         raise FileExistsError("This field cannot be empty")
+    
+    if returns_if_category_exists(data["title"]):
+        raise FileExistsError("Category already exists")
 
     if len(data["color"].replace(" ", "")) <= 0:
         raise FileExistsError("This field cannot be empty")
@@ -169,27 +195,42 @@ def add_new_category(data: dict):
     return id
 
 
-def update_category(category_id: int, data: dict):
+def update_category(categoryId: int, data: dict):
     """Update category info on database"""
 
     query = mongo.db.category.find_one(
-        {"id": category_id}, projection={"_id": False}
+        {"id": categoryId}, projection={"_id": False}
     )
     if query is None:
         raise FileExistsError("Category not found")
-
+    
+    if returns_if_category_exists(data["title"]):
+        raise FileExistsError("Category already exists")
+    
     if data.get("title") is None:
         data["title"] = query["title"]
     if data.get("color") is None:
         data["color"] = query["color"]
 
-    mongo.db.category.find_one_and_update({"id": category_id}, {"$set": data})
-    return category_id
+    mongo.db.category.find_one_and_update({"id": categoryId}, {"$set": data})
+    return categoryId
 
 
-def delete_category(category_id: int):
+def delete_category(categoryId: int):
     """Delete one category by id"""
 
-    if mongo.db.category.delete_one({"id": category_id}).deleted_count == 1:
-        return f"Video {category_id} deleted"
+    if mongo.db.category.delete_one({"id": categoryId}).deleted_count == 1:
+        return f"Video {categoryId} deleted"
     raise FileExistsError("Category not found")
+
+
+# CONTROLLER RELATIONSHIP
+
+
+def get_all_videos_by_category(categoryId: int):
+    """Get all videos by category from database and list information"""
+    query = mongo.db.videos.find({"categoryId": f"{categoryId}"}, projection={"_id": False})
+    data = {}
+    for video in query:
+        data[f"{video['categoryId']}"] = video
+    return data

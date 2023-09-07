@@ -3,18 +3,18 @@
         "title": "Funny Cats Compilation",
         "description": "A compilation of funny cats doing silly things",
         "url": "https://www.youtube.com/watch?v=abcd1234",
-        "category_id": "1"
+        "categoryId": "1"
     },
     {
         "title": "Guitar Tutorial: Learn to Play Wonderwall",
         "description": "A tutorial on how to play the song Wonderwall on guitar",
         "url": "https://www.youtube.com/watch?v=efgh5678",
-        "category_id": "1"
+        "categoryId": "1"
     },
     {
         "title": "Travel Vlog: Exploring Tokyo, Japan",
         "description": "A vlog showcasing the highlights of a trip to Tokyo, Japan",
         "url": "https://www.youtube.com/watch?v=ijkl9012",
-        "category_id": "1"
+        "categoryId": "1"
     }
 ]

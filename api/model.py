@@ -9,7 +9,7 @@
 #     description: str = Field(nullable=False)
 #     url: str = Field(nullable=False)
 
-#     category_id: int = Field(foreign_key="category.id")
+#     categoryId: int = Field(foreign_key="category.id")
 
 #     category: "Category" = Relationship(back_populates="video")
 
@@ -21,7 +21,7 @@
 #             "title": self.title,
 #             "description": self.description,
 #             "url": self.url,
-#             "category_id": self.category_id,
+#             "categoryId": self.categoryId,
 #         }
 
 

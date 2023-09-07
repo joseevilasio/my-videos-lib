@@ -15,6 +15,7 @@ from api.controller import (
     search_video,
     update_category,
     update_video,
+    get_all_videos_by_category
 )
 
 
@@ -77,7 +78,7 @@ def search(search_word):
     click.echo(result)
 
 
-# CATEGORY
+# COMMANDS CATEGORY
 
 
 @controller.command("show-category")
@@ -124,6 +125,17 @@ def update_category(id, data):
 
     result = update_category(int(id), data_dict)
     click.echo(get_category_by_id(result))
+
+
+# COMMANDS RELATIONSHIP
+
+
+@controller.command("show-videos-by-category")
+@click.argument("id", type=click.STRING, required=True)
+def show_videos_by_category(id):
+    """List all videos by category"""
+    result = get_all_videos_by_category(int(id))
+    click.echo(result)
 
 
 def configure(app: Flask):
