@@ -7,12 +7,12 @@ from api.controller import (
     delete_video,
     get_all_category,
     get_all_videos,
+    get_all_videos_by_category,
     get_category_by_id,
     get_video_by_id,
     search_video,
     update_category,
     update_video,
-    get_all_videos_by_category
 )
 
 bp = Blueprint("api", __name__)
@@ -130,6 +130,7 @@ def update_partial_category(categoryId):
 
 
 # RELATIONSHIP
+
 
 @bp.route("/category/<int:categoryId>/videos", methods=["GET"])
 def show_videos_by_category(categoryId):

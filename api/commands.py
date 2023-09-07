@@ -10,12 +10,12 @@ from api.controller import (
     delete_video,
     get_all_category,
     get_all_videos,
+    get_all_videos_by_category,
     get_category_by_id,
     get_video_by_id,
     search_video,
     update_category,
     update_video,
-    get_all_videos_by_category
 )
 
 
@@ -109,7 +109,7 @@ def new_category(data):
 
 @controller.command("delete-category")
 @click.argument("id", type=click.STRING, required=True)
-def delete_category(id):
+def delete_category_by_id(id):
     """Delete one category by id"""
     result = delete_category(int(id))
     click.echo(result)
@@ -118,7 +118,7 @@ def delete_category(id):
 @controller.command("update-category")
 @click.argument("id", type=click.INT, required=True)
 @click.argument("data", required=False)
-def update_category(id, data):
+def update_category_by_id(id, data):
     """Update category infor on database"""
     with open(data, "r") as data_json:
         data_dict = json.load(data_json)
