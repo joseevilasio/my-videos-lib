@@ -3,7 +3,6 @@
 # from api.controller import add_new_video
 # from tests.constants import VIDEO_FILE, VIDEO_FILE_2
 
-
 # def test_index_positive(client):
 #     """Test to check if index route is return OK"""
 
@@ -23,33 +22,27 @@
 # def test_list_videos_positive(client):
 #     """Test to check if list videos route is return OK"""
 
-#     add_new_video(VIDEO_FILE)
-
-#     with get_session() as session:
-#         result = session.exec(select(Video)).first()
+#     insert_video = add_new_video(VIDEO_FILE)
 
 #     response = client.get("/videos")
-#     assert result is not None
+#     assert insert_video is not None
 #     assert response.status_code == 200
 
 
 # def test_one_video_positive_data(client):
 #     """Test to check if one video route is return OK"""
 
-#     with get_session() as session:
-#         add_new_video(VIDEO_FILE)
-#         add_new_video(VIDEO_FILE_2)
 
-#         result = session.exec(select(Video)).first()
+#     add_new_video(VIDEO_FILE)
+#     add_new_video(VIDEO_FILE_2)
 
-#         response_1 = client.get("/videos/1")
-#         response_2 = client.get("/videos/2")
+#     response_1 = client.get("/videos/1")
+#     response_2 = client.get("/videos/2")
 
-#         assert result is not None
-#         assert response_1.status_code == 200
-#         assert response_1.status_code == 200
-#         assert b"Git e Github para iniciantes" in response_1.data
-#         assert b"https://www.youtube.com/watch?v=8485663" in response_2.data
+#     assert response_1.status_code == 200
+#     assert response_1.status_code == 200
+#     assert b"Git e Github para iniciantes" in response_1.data
+#     assert b"https://www.youtube.com/watch?v=8485663" in response_2.data
 
 
 # def test_delete_one_video(client):

@@ -1,7 +1,7 @@
 import pytest
+
 from api.app import create_app
 from api.database import mongo
-
 
 MARKER = """\
 unit: Mark unit tests
@@ -10,7 +10,8 @@ high: High Priority
 medium: Medium Priority
 low: Low Priority
 """
-    
+
+
 @pytest.fixture(scope="module")
 def app():
     """Instace of Main flask app"""

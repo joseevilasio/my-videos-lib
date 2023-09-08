@@ -120,6 +120,7 @@ def delete_category_by_id(id):
 @click.argument("data", required=False)
 def update_category_by_id(id, data):
     """Update category infor on database"""
+
     with open(data, "r") as data_json:
         data_dict = json.load(data_json)
 
