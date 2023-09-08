@@ -1,21 +1,6 @@
-from __future__ import annotations
-
-import pymongo
 import pytest
-from dynaconf import settings
-
-from tests.src import create_app
-
-
-@pytest.fixture(scope="session")
-def app():
-    app = create_app(FORCE_ENV_FOR_DYNACONF="testing")
-    return app
-
-
-@pytest.fixture(scope="session", autouse=True)
-def set_test_settings():
-    settings.configure(FORCE_ENV_FOR_DYNACONF="testing")
+from api.app import create_app
+from api.database import mongo
 
 
 MARKER = """\
@@ -25,6 +10,11 @@ high: High Priority
 medium: Medium Priority
 low: Low Priority
 """
+    
+@pytest.fixture(scope="module")
+def app():
+    """Instace of Main flask app"""
+    return create_app()
 
 
 def pytest_configure(config):
@@ -32,10 +22,12 @@ def pytest_configure(config):
         config.addinivalue_line("markers", line)
 
 
-@pytest.fixture(autouse=True, scope="module")
+@pytest.fixture(autouse=True)
 def setup_testing_database():
     """For each test, create a database."""
-    test_client = pymongo.MongoClient("mongodb://localhost:27017/")
-    database_test = test_client["database_test"]
-    yield database_test
-    test_client.drop_database("database_test")
+
+    app = create_app()
+    mongo.init_app(app, uri="mongodb://localhost:27017/database_test")
+
+    yield mongo
+    mongo.cx.drop_database("database_test")
