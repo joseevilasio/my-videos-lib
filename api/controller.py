@@ -141,6 +141,9 @@ def add_new_category(data: dict):
 
     id = get_next_sequence_value("category")
 
+    if data.get("title") is None or data.get("color") is None:
+        raise FileExistsError("This field cannot be empty")
+
     if len(data["title"].replace(" ", "")) <= 0:
         raise FileExistsError("This field cannot be empty")
 
@@ -169,10 +172,7 @@ def update_category(categoryId: int, data: dict):
     )
     if query is None:
         raise FileExistsError("Category not found")
-
-    if returns_if_category_exists(data["title"]):
-        raise FileExistsError("Category already exists")
-
+    
     if data.get("title") is None:
         data["title"] = query["title"]
     if data.get("color") is None:
@@ -186,7 +186,7 @@ def delete_category(categoryId: int):
     """Delete one category by id"""
 
     if mongo.db.category.delete_one({"id": categoryId}).deleted_count == 1:
-        return f"Video {categoryId} deleted"
+        return f"Category {categoryId} deleted"
     raise FileExistsError("Category not found")
 
 
