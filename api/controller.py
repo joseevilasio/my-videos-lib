@@ -172,7 +172,7 @@ def update_category(categoryId: int, data: dict):
     )
     if query is None:
         raise FileExistsError("Category not found")
-    
+
     if data.get("title") is None:
         data["title"] = query["title"]
     if data.get("color") is None:

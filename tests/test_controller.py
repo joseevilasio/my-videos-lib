@@ -1,18 +1,18 @@
 import pytest
 
 from api.controller import (
+    add_new_category,
     add_new_video,
+    delete_category,
     delete_video,
+    get_all_category,
     get_all_videos,
+    get_all_videos_by_category,
+    get_category_by_id,
     get_video_by_id,
     search_video,
-    update_video,
-    get_all_category,
-    get_category_by_id,
-    add_new_category,
-    delete_category,
     update_category,
-    get_all_videos_by_category
+    update_video,
 )
 from api.plugins import convert_json_for_dict
 from tests.constants import (
@@ -274,14 +274,12 @@ def test_update_video_negative():
 
 # CATEGORY TEST
 
+
 @pytest.mark.unit
 def test_get_all_category_positive():
     """Test get all category from database and list information"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     insert_data = add_new_category(data)
     result = get_all_category()
@@ -294,10 +292,7 @@ def test_get_all_category_positive():
 def test_get_category_by_id_positive():
     """Test positive get category by id from database and list information"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     add_new_category(data)
 
@@ -311,10 +306,7 @@ def test_get_category_by_id_positive():
 def test_get_category_by_id_negative():
     """Test negative get category by id from database and list information"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     add_new_category(data)
 
@@ -326,10 +318,7 @@ def test_get_category_by_id_negative():
 def test_add_new_category_positive():
     """Test positive Add new category on database"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     result = add_new_category(data)
 
@@ -340,9 +329,7 @@ def test_add_new_category_positive():
 def test_add_new_category_negative_untitled():
     """Test negative Add new category on database"""
 
-    data = {
-        "color": "blue"
-    }
+    data = {"color": "blue"}
 
     with pytest.raises(FileExistsError):
         add_new_category(data)
@@ -352,9 +339,7 @@ def test_add_new_category_negative_untitled():
 def test_add_new_category_negative_without_color():
     """Test negative Add new category on database"""
 
-    data = {
-        "title": "Humor"
-    }
+    data = {"title": "Humor"}
 
     with pytest.raises(FileExistsError):
         add_new_category(data)
@@ -364,10 +349,7 @@ def test_add_new_category_negative_without_color():
 def test_add_new_category_negative_category_exists():
     """Test negative Add new category on database"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     add_new_category(data)
 
@@ -379,10 +361,7 @@ def test_add_new_category_negative_category_exists():
 def test_add_new_category_negative_title_empty():
     """Test negative Add new category on database"""
 
-    data = {
-        "title": " ",
-        "color": "blue"
-    }
+    data = {"title": " ", "color": "blue"}
 
     with pytest.raises(FileExistsError):
         add_new_category(data)
@@ -392,10 +371,7 @@ def test_add_new_category_negative_title_empty():
 def test_add_new_category_negative_color_empty():
     """Test negative Add new category on database"""
 
-    data = {
-        "title": "Humor",
-        "color": "  "
-    }
+    data = {"title": "Humor", "color": "  "}
 
     with pytest.raises(FileExistsError):
         add_new_category(data)
@@ -405,10 +381,7 @@ def test_add_new_category_negative_color_empty():
 def test_delete_category_positive():
     """test delete one category by id"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     insert_data = add_new_category(data)
 
@@ -432,10 +405,7 @@ def test_delete_category_negative():
 def test_update_category_positive():
     """test update category info on database"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     add_new_category(data)
 
@@ -451,10 +421,7 @@ def test_update_category_positive():
 def test_update_category_positive_without_title():
     """test update category info on database"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
     insert_data = add_new_category(data)
     assert insert_data == 1
 
@@ -464,16 +431,13 @@ def test_update_category_positive_without_title():
 
     assert update_data == 1
     assert get_category_by_id(1)["color"] == "red"
-    
+
 
 @pytest.mark.unit
 def test_update_category_negative():
     """test update category info on database"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
     insert_data = add_new_category(data)
 
     assert insert_data == 1
@@ -488,10 +452,7 @@ def test_update_category_negative():
 def test_get_all_videos_by_category():
     """Test get all videos by category from database and list information"""
 
-    data = {
-        "title": "Humor",
-        "color": "blue"
-    }
+    data = {"title": "Humor", "color": "blue"}
 
     insert_data = add_new_category(data)
     assert insert_data == 1
