@@ -33,7 +33,6 @@ def list_videos():
 
 @bp.route("/videos/<int:video_id>")
 def one_video(video_id):
-    
     try:
         video = get_video_by_id(video_id)
     except FileExistsError:
