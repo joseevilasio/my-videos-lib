@@ -33,8 +33,10 @@ def list_videos():
 
 @bp.route("/videos/<int:video_id>")
 def one_video(video_id):
-    video = get_video_by_id(video_id)
-    if not video:
+    
+    try:
+        video = get_video_by_id(video_id)
+    except FileExistsError:
         return abort(404)
     return jsonify(video), 200
 
