@@ -28,7 +28,7 @@ def get_video_by_id(video_id: int) -> dict:
     return query
 
 
-def add_new_video(data: dict):
+def add_new_video(data: dict) -> int:
     """Add new video on database"""
     id = get_next_sequence_value("videos")
 
@@ -48,7 +48,7 @@ def add_new_video(data: dict):
     if is_valid_url(data["url"]) is False:
         raise ValueError("Url is invalid")
 
-    if len(data["categoryId"]) <= 0:
+    if data.get("categoryId") is None:
         data["categoryId"] = None
 
     mongo.db.videos.insert_one(
@@ -64,7 +64,7 @@ def add_new_video(data: dict):
     return id
 
 
-def update_video(video_id: int, data):
+def update_video(video_id: int, data) -> int:
     """Update video info on database"""
 
     query = mongo.db.videos.find_one(
@@ -86,7 +86,7 @@ def update_video(video_id: int, data):
     return video_id
 
 
-def delete_video(video_id: int):
+def delete_video(video_id: int) -> str:
     """Delete one video by id"""
 
     if mongo.db.videos.delete_one({"id": video_id}).deleted_count == 1:
@@ -94,16 +94,15 @@ def delete_video(video_id: int):
     raise FileExistsError("Video not found")
 
 
-def search_video(search: str):
+def search_video(search: str) -> dict:
     """Search video by string match"""
     # TODO: Resolver problema de exibição, return vazio
     # TODO: regex funciona com texto exatamente igual
     query = mongo.db.videos.find(
-        filter={"title": {"$regex": f"{search}"}}, projection={"_id": False}
+        filter={"title": {"$regex": rf"{search}"}}, projection={"_id": False}
     )
-    print(list(query))
 
-    if query is None:
+    if len(list(query)) == 0:
         raise FileExistsError(f"Video not found with '{search}'")
 
     data = {}
