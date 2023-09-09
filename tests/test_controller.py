@@ -5,6 +5,8 @@ from api.controller import (
     delete_video,
     get_all_videos,
     get_video_by_id,
+    search_video,
+    update_video,
 )
 from api.plugins import convert_json_for_dict
 from tests.constants import (
@@ -104,6 +106,65 @@ def test_add_new_video_negative_without_url():
 
 
 @pytest.mark.unit
+def test_add_new_video_negative_title_empty():
+    """Test negative Add new video on database"""
+
+    data = {
+        "title": "  ",
+        "description": "Aprenda a usar o Git e Github com os cursos da Alura",
+        "url": "https://www.youtube.com/watch?v=ABC123",
+        "categoryId": "1",
+    }
+
+    with pytest.raises(FileExistsError):
+        add_new_video(data)
+
+
+@pytest.mark.unit
+def test_add_new_video_negative_description_empty():
+    """Test negative Add new video on database"""
+
+    data = {
+        "title": "Git e Github para iniciantes",
+        "description": " ",
+        "url": "https://www.youtube.com/watch?v=ABC123",
+        "categoryId": "1",
+    }
+
+    with pytest.raises(FileExistsError):
+        add_new_video(data)
+
+
+@pytest.mark.unit
+def test_add_new_video_negative_url_wrong():
+    """Test negative Add new video on database"""
+
+    data = {
+        "title": "Git e Github para iniciantes",
+        "description": "Aprenda a usar o Git e Github com os cursos da Alura",
+        "url": "youtube com/watch?v=ABC123",
+        "categoryId": "1",
+    }
+
+    with pytest.raises(ValueError):
+        add_new_video(data)
+
+
+@pytest.mark.unit
+def test_add_new_video_positve_without_category():
+    """Test negative Add new video on database"""
+
+    data = {
+        "title": "Git e Github para iniciantes",
+        "description": "Aprenda a usar o Git e Github com os cursos da Alura",
+        "url": "youtube.com/watch?v=ABC123",
+    }
+
+    assert add_new_video(data) == 1
+    assert get_video_by_id(1).get("categoryId") is None
+
+
+@pytest.mark.unit
 def test_delete_video_positive():
     """test delete one video by id"""
 
@@ -115,3 +176,91 @@ def test_delete_video_positive():
     result = delete_video(id)
 
     assert result == f"Video {id} deleted"
+
+
+@pytest.mark.unit
+def test_delete_video_negative():
+    """test delete one video by id"""
+
+    id = 1
+    with pytest.raises(FileExistsError):
+        delete_video(id)
+
+
+@pytest.mark.unit
+def test_search_video_positive():
+    """test search video by string match"""
+
+    data = convert_json_for_dict(VIDEO_FILE)
+    insert_data = add_new_video(data)
+
+    assert insert_data == 1
+
+    word = "iniciante"
+    result = search_video(word)
+    print(result)
+
+
+@pytest.mark.unit
+def test_search_video_negative():
+    """test search video by string match"""
+
+    data = convert_json_for_dict(VIDEO_FILE)
+    add_new_video(data)
+
+    word = "tempo"
+
+    with pytest.raises(FileExistsError):
+        search_video(word)
+
+
+@pytest.mark.unit
+def test_update_video_positive():
+    """test update video info on database"""
+
+    data = convert_json_for_dict(VIDEO_FILE)
+    insert_data = add_new_video(data)
+
+    assert insert_data == 1
+
+    new_data = {"title": "Novos Rumos"}
+
+    update_data = update_video(1, new_data)
+
+    assert update_data == 1
+    assert get_video_by_id(1)["title"] == "Novos Rumos"
+
+
+@pytest.mark.unit
+def test_update_video_positive_without_title():
+    """test update video info on database"""
+
+    data = convert_json_for_dict(VIDEO_FILE)
+    insert_data = add_new_video(data)
+
+    assert insert_data == 1
+
+    new_data = {"description": "Um novo olhar sobre as estruturas de dados"}
+
+    update_data = update_video(1, new_data)
+
+    assert update_data == 1
+    assert (
+        get_video_by_id(1)["description"]
+        == "Um novo olhar sobre as estruturas de dados"
+    )
+
+
+@pytest.mark.unit
+def test_update_video_negative():
+    """test update video info on database"""
+
+    data = convert_json_for_dict(VIDEO_FILE)
+    insert_data = add_new_video(data)
+
+    assert insert_data == 1
+
+    new_data = {"title": "Novos Rumos"}
+
+    with pytest.raises(FileExistsError):
+        update_video(2, new_data)
