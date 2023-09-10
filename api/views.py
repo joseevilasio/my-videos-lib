@@ -54,21 +54,21 @@ def delete_one_video(video_id):
 def new_video():
     data = request.get_json()
     video = add_new_video(data)
-    return redirect(url_for("api.one_video", video_id=video))
+    return redirect(url_for("api.one_video", video_id=video), 200)
 
 
 @bp.route("/videos/<int:video_id>", methods=["GET", "PUT"])
 def update_data_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
-    return redirect(url_for("api.one_video", video_id=video))
+    return redirect(url_for("api.one_video", video_id=video), 200)
 
 
 @bp.route("/videos/<int:video_id>", methods=["GET", "PATCH"])
 def update_partial_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
-    return redirect(url_for("api.one_video", video_id=video))
+    return redirect(url_for("api.one_video", video_id=video), 200)
 
 
 @bp.route("/videos/")
@@ -113,21 +113,21 @@ def delete_one_category(categoryId):
 def new_category():
     data = request.get_json()
     category = add_new_category(data)
-    return redirect(url_for("api.one_category", categoryId=category))
+    return redirect(url_for("api.one_category", categoryId=category), 200)
 
 
 @bp.route("/category/<int:categoryId>", methods=["GET", "PUT"])
 def update_data_category(categoryId):
     data = request.get_json()
     category = update_category(categoryId, data)
-    return redirect(url_for("api.one_category", categoryId=category))
+    return redirect(url_for("api.one_category", categoryId=category), 200)
 
 
 @bp.route("/category/<int:categoryId>", methods=["GET", "PATCH"])
 def update_partial_category(categoryId):
     data = request.get_json()
     category = update_category(categoryId, data)
-    return redirect(url_for("api.one_category", categoryId=category))
+    return redirect(url_for("api.one_category", categoryId=category), 200)
 
 
 # RELATIONSHIP

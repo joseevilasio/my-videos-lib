@@ -3,6 +3,7 @@ import pytest
 from api.controller import add_new_video
 from api.plugins import convert_json_for_dict
 from tests.constants import VIDEO_FILE, VIDEO_FILE_2
+from flask import json
 
 
 @pytest.mark.integration
@@ -70,7 +71,7 @@ def test_delete_one_video(client):
 
 #     response = client.post(
 #         "/videos/new",
-#         VIDEO_FILE,
+#         json=VIDEO_FILE,
 #         headers={"Content-Type": "application/json"}
 #     )
 
@@ -81,25 +82,15 @@ def test_delete_one_video(client):
 # def test_update_data_video(client):
 #     """Test to check if update video route is return OK"""
 
-#     with get_session() as session:
-#         add_new_video(VIDEO_FILE)
-#         result_after = session.exec(select(Video)).first()
-#         assert result_after is not None
+#     insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
+#     assert insert_data == 1
 
-#         data = {
-#             "title": "Aprenda GIT/GITHUB em 15 minutos",
-#             "description": """Aprenda a usar o Git e Github com os cursos da
-#             Alura""",
-#             "url": "https://www.youtube.com/watch?v=ABC123",
-#         }
+#     data = {"title": "Aprenda GIT/GITHUB em 15 minutos"}
 
-#         response_put = client.put("/videos/1", json=json.dumps(data))
-
-#         result_before = session.exec(select(Video.title)).first()
-
-#         assert result_before == "Aprenda GIT/GITHUB em 15 minutos"
-#         assert response_put.status_code == 200
-#         assert b"updated with success" in response_put.data
+#     response = client.put("/videos/1", json=json.dumps(data))
+    
+#     assert response.status_code == 200
+#     assert b"Aprenda GIT/GITHUB em 15 minutos" in response.data
 
 
 # def test_update_partial_video(client):
