@@ -1,4 +1,4 @@
-[![CI](https://github.com/joseevilasio/CRUD-Challenge-Alura/actions/workflows/main.yml/badge.svg)](https://github.com/joseevilasio/CRUD-Challenge-Alura/actions/workflows/main.yml)
+[![CI](https://github.com/joseevilasio/my-videos-lib/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/joseevilasio/my-videos-lib/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/joseevilasio/CRUD-Challenge-Alura/graph/badge.svg?token=VK8Z1CJZ6J)](https://codecov.io/gh/joseevilasio/CRUD-Challenge-Alura)
 
 # MY VIDEOS LIB - CRUD - ALURA CHALLENGE 
