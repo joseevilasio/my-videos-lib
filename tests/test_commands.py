@@ -1,12 +1,7 @@
 import pytest
 from click.testing import CliRunner
 
-from api.commands import (
-    show,
-    show_one,
-    new_video,
-)
-
+from api.commands import new_video, show, show_one
 from api.controller import add_new_video
 from api.plugins import convert_json_for_dict
 from tests.constants import VIDEO_FILE
@@ -40,7 +35,7 @@ def test_show_one_positive():
 
 @pytest.mark.integration
 def new_video_positive():
-    """Test Add new video on database in CLI"""  
+    """Test Add new video on database in CLI"""
 
     out = cmd.invoke(new_video, VIDEO_FILE)
 

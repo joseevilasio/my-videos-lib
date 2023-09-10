@@ -3,7 +3,6 @@ import pytest
 from api.controller import add_new_video
 from api.plugins import convert_json_for_dict
 from tests.constants import VIDEO_FILE, VIDEO_FILE_2
-from flask import json
 
 
 @pytest.mark.integration
@@ -88,7 +87,7 @@ def test_delete_one_video(client):
 #     data = {"title": "Aprenda GIT/GITHUB em 15 minutos"}
 
 #     response = client.put("/videos/1", json=json.dumps(data))
-    
+
 #     assert response.status_code == 200
 #     assert b"Aprenda GIT/GITHUB em 15 minutos" in response.data
 
