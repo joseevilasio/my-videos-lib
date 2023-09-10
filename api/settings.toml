@@ -6,3 +6,13 @@ extensions = [
     "api.commands:configure",
     "api.views:configure"
 ]
+
+
+[testing]
+VALUE = "On Testing"
+mongo_uri = "mongodb://localhost:27017/database_test"
+extensions = [
+    "api.database:configure",
+    "api.commands:configure",
+    "api.views:configure"
+]

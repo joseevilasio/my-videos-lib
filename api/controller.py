@@ -1,54 +1,14 @@
-import re
-
 from api.database import mongo
-
-
-def get_next_sequence_value(db_name: str):
-    """Create unique id in each collection"""
-    sequence = mongo.db.sequences.find_one_and_update(
-        {"_id": db_name},
-        {"$inc": {"sequence_value": 1}},
-        upsert=True,
-        return_document=True,
-    )
-    return sequence["sequence_value"]
-
-
-def is_valid_url(url: str):
-    """Regular expression to check basic URL format"""
-    url_pattern = re.compile(
-        r"^(https?://)?"  # Protocolo (opcional)
-        r"([A-Za-z_0-9.-]+)"  # Nome de host (obrigatório)
-        r"(:\d+)?"  # Porta (opcional)
-        r"(/[^?#]*)?"  # Caminho (opcional)
-        r"(\?[^#]*)?"  # Query string (opcional)
-        r"(#.*)?$"  # Fragmento (opcional)
-    )
-
-    # Verificar se a URL corresponde ao padrão
-    return bool(url_pattern.match(url))
-
-
-def regex_case_insensitive(word: str):
-    """Ignore uppercase, lowercase and accents"""
-    return re.compile(f"^{re.escape(word)}$", re.IGNORECASE)
-
-
-def returns_if_category_exists(title: str):
-    """Check if category already exists"""
-    # TODO: Utilizar REGEX para buscar tanto em uppercase como em lowercase
-    query = mongo.db.category.find_one(
-        {"title": f"{title}"}, projection={"_id": False}
-    )
-    if query is not None:
-        return True
-    return False
-
+from api.plugins import (
+    get_next_sequence_value,
+    is_valid_url,
+    returns_if_category_exists,
+)
 
 # CONTROLLER VIDEOS
 
 
-def get_all_videos():
+def get_all_videos() -> dict:
     """Get all videos from database and list information"""
     query = mongo.db.videos.find(projection={"_id": False})
     data = {}
@@ -57,7 +17,7 @@ def get_all_videos():
     return data
 
 
-def get_video_by_id(video_id: int):
+def get_video_by_id(video_id: int) -> dict:
     """Get video by id from database and list information"""
 
     query = mongo.db.videos.find_one(
@@ -68,9 +28,16 @@ def get_video_by_id(video_id: int):
     return query
 
 
-def add_new_video(data: dict):
+def add_new_video(data: dict) -> int:
     """Add new video on database"""
     id = get_next_sequence_value("videos")
+
+    if (
+        data.get("title") is None
+        or data.get("description") is None
+        or data.get("url") is None
+    ):
+        raise FileExistsError("This field cannot be empty")
 
     if len(data["title"].replace(" ", "")) <= 0:
         raise FileExistsError("This field cannot be empty")
@@ -81,7 +48,7 @@ def add_new_video(data: dict):
     if is_valid_url(data["url"]) is False:
         raise ValueError("Url is invalid")
 
-    if len(data["categoryId"]) <= 0:
+    if data.get("categoryId") is None:
         data["categoryId"] = None
 
     mongo.db.videos.insert_one(
@@ -97,7 +64,7 @@ def add_new_video(data: dict):
     return id
 
 
-def update_video(video_id: int, data):
+def update_video(video_id: int, data) -> int:
     """Update video info on database"""
 
     query = mongo.db.videos.find_one(
@@ -119,7 +86,7 @@ def update_video(video_id: int, data):
     return video_id
 
 
-def delete_video(video_id: int):
+def delete_video(video_id: int) -> str:
     """Delete one video by id"""
 
     if mongo.db.videos.delete_one({"id": video_id}).deleted_count == 1:
@@ -127,16 +94,15 @@ def delete_video(video_id: int):
     raise FileExistsError("Video not found")
 
 
-def search_video(search: str):
+def search_video(search: str) -> dict:
     """Search video by string match"""
     # TODO: Resolver problema de exibição, return vazio
     # TODO: regex funciona com texto exatamente igual
     query = mongo.db.videos.find(
-        filter={"title": {"$regex": f"{search}"}}, projection={"_id": False}
+        filter={"title": {"$regex": rf"{search}"}}, projection={"_id": False}
     )
-    print(list(query))
 
-    if query is None:
+    if len(list(query)) == 0:
         raise FileExistsError(f"Video not found with '{search}'")
 
     data = {}
@@ -175,6 +141,9 @@ def add_new_category(data: dict):
 
     id = get_next_sequence_value("category")
 
+    if data.get("title") is None or data.get("color") is None:
+        raise FileExistsError("This field cannot be empty")
+
     if len(data["title"].replace(" ", "")) <= 0:
         raise FileExistsError("This field cannot be empty")
 
@@ -204,9 +173,6 @@ def update_category(categoryId: int, data: dict):
     if query is None:
         raise FileExistsError("Category not found")
 
-    if returns_if_category_exists(data["title"]):
-        raise FileExistsError("Category already exists")
-
     if data.get("title") is None:
         data["title"] = query["title"]
     if data.get("color") is None:
@@ -220,7 +186,7 @@ def delete_category(categoryId: int):
     """Delete one category by id"""
 
     if mongo.db.category.delete_one({"id": categoryId}).deleted_count == 1:
-        return f"Video {categoryId} deleted"
+        return f"Category {categoryId} deleted"
     raise FileExistsError("Category not found")
 
 

@@ -1,9 +1,0 @@
-[testing]
-VALUE = "On Testing"
-mongo_uri = "mongodb://localhost:27017/myvideoslib"
-extensions = [
-    "api.database:configure",
-    "api.commands:configure",
-    "api.views:configure"
-]
-
