@@ -1,7 +1,11 @@
 import json
 import re
 
+from flask_jwt_extended import JWTManager
+
 from api.database import mongo
+
+jwt = JWTManager()
 
 
 def get_next_sequence_value(db_name: str):
@@ -51,3 +55,7 @@ def convert_json_for_dict(data) -> dict:
         data = json.load(data_json)
 
     return data
+
+
+def configure(app):
+    jwt.init_app(app)

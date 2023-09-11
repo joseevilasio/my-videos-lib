@@ -1,4 +1,5 @@
 from flask import Blueprint, Flask, abort, jsonify, redirect, request, url_for
+from flask_jwt_extended import jwt_required
 from flask_simplelogin import login_required
 
 from api.controller import (
@@ -25,6 +26,7 @@ def index():
 
 
 @bp.route("/videos")
+@jwt_required()
 def list_videos():
     videos = get_all_videos()
     if not videos:

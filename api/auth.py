@@ -1,11 +1,19 @@
 import click
+from flask_jwt_extended import create_access_token
 from flask_simplelogin import SimpleLogin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from api.database import mongo
 
 
-def create_user(**data):
+def create_token(username: str) -> str:
+    """Creates tokens for user"""
+    token = create_access_token(identity=username, expires_delta=False)
+
+    return token
+
+
+def create_user(**data) -> dict:
     """Creates user with encrypted password"""
     if "username" not in data or "password" not in data:
         raise ValueError("username and password are required.")
@@ -13,6 +21,9 @@ def create_user(**data):
     data["password"] = generate_password_hash(
         data.pop("password"), method="pbkdf2:sha256"
     )
+
+    data["token"] = create_token(data["username"])
+
     mongo.db.users.insert_one(data)
     return data
 
