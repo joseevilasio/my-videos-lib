@@ -253,6 +253,26 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-admin"
+version = "1.6.1"
+description = "Simple and extensible admin interface framework for Flask"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "Flask-Admin-1.6.1.tar.gz", hash = "sha256:24cae2af832b6a611a01d7dc35f42d266c1d6c75a426b869d8cb241b78233369"},
+    {file = "Flask_Admin-1.6.1-py3-none-any.whl", hash = "sha256:fd8190f1ec3355913a22739c46ed3623f1d82b8112cde324c60a6fc9b21c9406"},
+]
+
+[package.dependencies]
+Flask = ">=0.7"
+wtforms = "*"
+
+[package.extras]
+aws = ["boto"]
+azure = ["azure-storage-blob"]
+
+[[package]]
 name = "flask-pymongo"
 version = "2.3.0"
 description = "PyMongo support for Flask applications"
@@ -267,6 +287,47 @@ files = [
 [package.dependencies]
 Flask = ">=0.11"
 PyMongo = ">=3.3"
+
+[[package]]
+name = "flask-simplelogin"
+version = "0.1.2"
+description = "Flask Simple Login - Login Extension for Flask"
+category = "main"
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "flask_simplelogin-0.1.2-py3-none-any.whl", hash = "sha256:484845c10d6e48bc88d20e2fb19de565c2fe608a59bcbb902572f07b5437b188"},
+    {file = "flask_simplelogin-0.1.2.tar.gz", hash = "sha256:a99b7ded371aa0f5ecf3271c160e3fd52653abd5d879acf9ae621c4825345a8f"},
+]
+
+[package.dependencies]
+click = ">=8.0.1,<9.0.0"
+Flask = ">=0.12"
+Flask-WTF = ">1.1"
+WTForms = ">=2.1"
+
+[package.extras]
+docs = ["Sphinx (>=4.1.2,<5.0.0)", "recommonmark (>=0.7.1,<0.8.0)", "sphinx-markdown-tables (>=0.0.15,<0.0.16)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)"]
+
+[[package]]
+name = "flask-wtf"
+version = "1.1.1"
+description = "Form rendering, validation, and CSRF protection for Flask with WTForms."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "Flask-WTF-1.1.1.tar.gz", hash = "sha256:41c4244e9ae626d63bed42ae4785b90667b885b1535d5a4095e1f63060d12aa9"},
+    {file = "Flask_WTF-1.1.1-py3-none-any.whl", hash = "sha256:7887d6f1ebb3e17bf648647422f0944c9a469d0fcf63e3b66fb9a83037e38b2c"},
+]
+
+[package.dependencies]
+Flask = "*"
+itsdangerous = "*"
+WTForms = "*"
+
+[package.extras]
+email = ["email-validator"]
 
 [[package]]
 name = "importlib-metadata"
@@ -763,6 +824,24 @@ MarkupSafe = ">=2.1.1"
 watchdog = ["watchdog (>=2.3)"]
 
 [[package]]
+name = "wtforms"
+version = "3.0.1"
+description = "Form validation and rendering for Python web development."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "WTForms-3.0.1-py3-none-any.whl", hash = "sha256:837f2f0e0ca79481b92884962b914eba4e72b7a2daaf1f939c890ed0124b834b"},
+    {file = "WTForms-3.0.1.tar.gz", hash = "sha256:6b351bbb12dd58af57ffef05bc78425d08d1914e0fd68ee14143b7ade023c5bc"},
+]
+
+[package.dependencies]
+MarkupSafe = "*"
+
+[package.extras]
+email = ["email-validator"]
+
+[[package]]
 name = "zipp"
 version = "3.16.2"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -781,4 +860,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.1"
-content-hash = "66e7d2f26c57f83ba3ad1dee1c96a6268ba4e524736b4b10bd30b489f982c9f2"
+content-hash = "ae849e739d48db36b93371488f6a70dc803b8d17436a786b6979450585193661"

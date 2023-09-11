@@ -4,9 +4,12 @@ mongo_uri = "mongodb://localhost:27017/myvideoslib"
 extensions = [
     "api.database:configure",
     "api.commands:configure",
-    "api.views:configure"
+    "api.views:configure",
+    "api.admin:configure",
+    "api.auth:configure"
 ]
-
+secret_key = "cbc3cc17474f1c72f7582286e4a127a82e94ee2d132b17d0b49a1908c4239aa6"
+FLASK_ADMIN_SWATCH = "minty"
 
 [testing]
 VALUE = "On Testing"
@@ -14,5 +17,7 @@ mongo_uri = "mongodb://localhost:27017/database_test"
 extensions = [
     "api.database:configure",
     "api.commands:configure",
-    "api.views:configure"
+    "api.views:configure",
+    "api.admin:configure"
 ]
+secret_key = "cbc3cc17474f1c72f7582286e4a127a82e94ee2d132b17d0b49a1908c4239aa6"
