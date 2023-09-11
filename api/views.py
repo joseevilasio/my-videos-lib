@@ -1,4 +1,5 @@
 from flask import Blueprint, Flask, abort, jsonify, redirect, request, url_for
+from flask_simplelogin import login_required
 
 from api.controller import (
     add_new_category,
@@ -41,6 +42,7 @@ def one_video(video_id):
 
 
 @bp.route("/videos/<int:video_id>", methods=["DELETE"])
+@login_required()
 def delete_one_video(video_id):
     video = get_video_by_id(video_id)
     if not video:
@@ -51,6 +53,7 @@ def delete_one_video(video_id):
 
 
 @bp.route("/videos/new", methods=["GET", "POST"])
+@login_required()
 def new_video():
     data = request.get_json()
     video = add_new_video(data)
@@ -58,6 +61,7 @@ def new_video():
 
 
 @bp.route("/videos/<int:video_id>", methods=["GET", "PUT"])
+@login_required()
 def update_data_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
@@ -65,6 +69,7 @@ def update_data_video(video_id):
 
 
 @bp.route("/videos/<int:video_id>", methods=["GET", "PATCH"])
+@login_required()
 def update_partial_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
@@ -100,6 +105,7 @@ def one_category(categoryId):
 
 
 @bp.route("/category/<int:categoryId>", methods=["DELETE"])
+@login_required()
 def delete_one_category(categoryId):
     category = get_category_by_id(categoryId)
     if not category:
@@ -110,6 +116,7 @@ def delete_one_category(categoryId):
 
 
 @bp.route("/category/new", methods=["GET", "POST"])
+@login_required()
 def new_category():
     data = request.get_json()
     category = add_new_category(data)
@@ -117,6 +124,7 @@ def new_category():
 
 
 @bp.route("/category/<int:categoryId>", methods=["GET", "PUT"])
+@login_required()
 def update_data_category(categoryId):
     data = request.get_json()
     category = update_category(categoryId, data)
@@ -124,6 +132,7 @@ def update_data_category(categoryId):
 
 
 @bp.route("/category/<int:categoryId>", methods=["GET", "PATCH"])
+@login_required()
 def update_partial_category(categoryId):
     data = request.get_json()
     category = update_category(categoryId, data)
