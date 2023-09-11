@@ -47,6 +47,8 @@ python = "^3.8.1"
 flask = "^2.2.3"
 dynaconf = "^3.1.12"
 flask-pymongo = "^2.3.0"
+flask-admin = "^1.6.1"
+flask-simplelogin = "^0.1.2"
 
 
 [tool.poetry.group.dev.dependencies]
