@@ -24,13 +24,19 @@ from tests.constants import (
 )
 
 
+class MockMongoDb:
+    def insert_one(self, data):
+        raise SystemError()
+
+
 @pytest.mark.unit
 def test_get_all_videos_positive():
     """Test get all videos from database and list information"""
 
     data = convert_json_for_dict(VIDEO_FILE)
 
-    assert get_all_videos() == {}
+    with pytest.raises(FileNotFoundError):
+        get_all_videos() == {}
 
     insert_data = add_new_video(data)
     result = get_all_videos()
@@ -40,18 +46,25 @@ def test_get_all_videos_positive():
 
 
 @pytest.mark.unit
-@pytest.mark.parametrize("id", [1, 2])
-def test_get_video_by_id_positive(id):
+def test_get_all_videos_negative():
+    """Test negative get all videos from database and list information"""
+
+    with pytest.raises(FileNotFoundError):
+        get_all_videos()
+
+
+@pytest.mark.unit
+def test_get_video_by_id_positive():
     """Test positive get video by id from database and list information"""
 
-    data_1 = convert_json_for_dict(VIDEO_FILE)
-    data_2 = convert_json_for_dict(VIDEO_FILE_2)
-    add_new_video(data_1)
-    add_new_video(data_2)
+    add_new_video(convert_json_for_dict(VIDEO_FILE))
+    add_new_video(convert_json_for_dict(VIDEO_FILE_2))
 
-    result = get_video_by_id(id)
+    result_1 = get_video_by_id(1)
+    result_2 = get_video_by_id(2)
 
-    assert result != FileExistsError
+    assert result_1["title"] == "Git e Github para iniciantes"
+    assert result_2["title"] == "Introdução à programação em Go"
 
 
 @pytest.mark.unit
@@ -59,12 +72,10 @@ def test_get_video_by_id_positive(id):
 def test_get_video_by_id_negative(id):
     """Test negative get video by id from database and list information"""
 
-    data_1 = convert_json_for_dict(VIDEO_FILE)
-    data_2 = convert_json_for_dict(VIDEO_FILE_2)
-    add_new_video(data_1)
-    add_new_video(data_2)
+    add_new_video(convert_json_for_dict(VIDEO_FILE))
+    add_new_video(convert_json_for_dict(VIDEO_FILE_2))
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(FileNotFoundError):
         get_video_by_id(id)
 
 
@@ -72,10 +83,8 @@ def test_get_video_by_id_negative(id):
 def test_add_new_video_positive():
     """Test positive Add new video on database"""
 
-    data_1 = convert_json_for_dict(VIDEO_FILE)
-    data_2 = convert_json_for_dict(VIDEO_FILE_2)
-    result_1 = add_new_video(data_1)
-    result_2 = add_new_video(data_2)
+    result_1 = add_new_video(convert_json_for_dict(VIDEO_FILE))
+    result_2 = add_new_video(convert_json_for_dict(VIDEO_FILE_2))
 
     assert result_1 == 1
     assert result_2 == 2
@@ -87,7 +96,7 @@ def test_add_new_video_negative_untitled():
 
     data = convert_json_for_dict(VIDEO_FILE_3_ERRO)
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_video(data)
 
 
@@ -97,7 +106,7 @@ def test_add_new_video_negative_without_description():
 
     data = convert_json_for_dict(VIDEO_FILE_4_ERRO)
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_video(data)
 
 
@@ -107,7 +116,7 @@ def test_add_new_video_negative_without_url():
 
     data = convert_json_for_dict(VIDEO_FILE_5_ERRO)
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_video(data)
 
 
@@ -122,7 +131,7 @@ def test_add_new_video_negative_title_empty():
         "categoryId": "1",
     }
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_video(data)
 
 
@@ -137,7 +146,7 @@ def test_add_new_video_negative_description_empty():
         "categoryId": "1",
     }
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_video(data)
 
 
@@ -174,49 +183,41 @@ def test_add_new_video_positve_without_category():
 def test_delete_video_positive():
     """test delete one video by id"""
 
-    data = convert_json_for_dict(VIDEO_FILE)
-    insert_data = add_new_video(data)
+    insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
 
     assert insert_data == 1
-    id = 1
-    result = delete_video(id)
-
-    assert result == f"Video {id} deleted"
+    result = delete_video(1)
+    assert result == "Video deleted"
 
 
 @pytest.mark.unit
 def test_delete_video_negative():
     """test delete one video by id"""
 
-    id = 1
-    with pytest.raises(FileExistsError):
-        delete_video(id)
+    with pytest.raises(FileNotFoundError):
+        delete_video(1)
 
 
 @pytest.mark.unit
 def test_search_video_positive():
     """test search video by string match"""
 
-    data = convert_json_for_dict(VIDEO_FILE)
-    insert_data = add_new_video(data)
-
+    insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
     assert insert_data == 1
 
-    word = "iniciante"
+    word = "iniciantes"
     result = search_video(word)
-    print(result)
+    assert result["1"]["title"] == "Git e Github para iniciantes"
 
 
 @pytest.mark.unit
 def test_search_video_negative():
     """test search video by string match"""
 
-    data = convert_json_for_dict(VIDEO_FILE)
-    add_new_video(data)
-
+    add_new_video(convert_json_for_dict(VIDEO_FILE))
     word = "tempo"
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(FileNotFoundError):
         search_video(word)
 
 
@@ -241,9 +242,7 @@ def test_update_video_positive():
 def test_update_video_positive_without_title():
     """test update video info on database"""
 
-    data = convert_json_for_dict(VIDEO_FILE)
-    insert_data = add_new_video(data)
-
+    insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
     assert insert_data == 1
 
     new_data = {"description": "Um novo olhar sobre as estruturas de dados"}
@@ -261,14 +260,12 @@ def test_update_video_positive_without_title():
 def test_update_video_negative():
     """test update video info on database"""
 
-    data = convert_json_for_dict(VIDEO_FILE)
-    insert_data = add_new_video(data)
-
+    insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
     assert insert_data == 1
 
     new_data = {"title": "Novos Rumos"}
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(FileNotFoundError):
         update_video(2, new_data)
 
 
@@ -289,6 +286,14 @@ def test_get_all_category_positive():
 
 
 @pytest.mark.unit
+def test_get_all_category_negative():
+    """Test negative get all category from database and list information"""
+
+    with pytest.raises(FileNotFoundError):
+        get_all_category()
+
+
+@pytest.mark.unit
 def test_get_category_by_id_positive():
     """Test positive get category by id from database and list information"""
 
@@ -298,7 +303,7 @@ def test_get_category_by_id_positive():
 
     result = get_category_by_id(1)
 
-    assert result != FileExistsError
+    assert result != FileNotFoundError
     assert result["title"] == "Humor"
 
 
@@ -310,7 +315,7 @@ def test_get_category_by_id_negative():
 
     add_new_category(data)
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(FileNotFoundError):
         get_category_by_id(2)
 
 
@@ -331,7 +336,7 @@ def test_add_new_category_negative_untitled():
 
     data = {"color": "blue"}
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_category(data)
 
 
@@ -341,7 +346,7 @@ def test_add_new_category_negative_without_color():
 
     data = {"title": "Humor"}
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_category(data)
 
 
@@ -353,7 +358,7 @@ def test_add_new_category_negative_category_exists():
 
     add_new_category(data)
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_category(data)
 
 
@@ -363,7 +368,7 @@ def test_add_new_category_negative_title_empty():
 
     data = {"title": " ", "color": "blue"}
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_category(data)
 
 
@@ -373,7 +378,7 @@ def test_add_new_category_negative_color_empty():
 
     data = {"title": "Humor", "color": "  "}
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(ValueError):
         add_new_category(data)
 
 
@@ -397,7 +402,7 @@ def test_delete_category_negative():
     """test delete one category by id"""
 
     id = 1
-    with pytest.raises(FileExistsError):
+    with pytest.raises(FileNotFoundError):
         delete_category(id)
 
 
@@ -444,7 +449,7 @@ def test_update_category_negative():
 
     new_data = {"title": "Novos Rumos"}
 
-    with pytest.raises(FileExistsError):
+    with pytest.raises(FileNotFoundError):
         update_category(2, new_data)
 
 
@@ -465,3 +470,21 @@ def test_get_all_videos_by_category():
     result = get_all_videos_by_category(1)
 
     assert result["1"]["title"] == "Git e Github para iniciantes"
+
+
+@pytest.mark.unit
+def test_get_all_videos_by_category_negative():
+    """Test get all videos by category from database and list information"""
+
+    data = {"title": "Humor", "color": "blue"}
+
+    insert_data = add_new_category(data)
+    assert insert_data == 1
+
+    data_video = convert_json_for_dict(VIDEO_FILE)
+    insert_data_video = add_new_video(data_video)
+
+    assert insert_data_video == 1
+
+    with pytest.raises(FileNotFoundError):
+        get_all_videos_by_category(2)
