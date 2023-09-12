@@ -24,11 +24,6 @@ from tests.constants import (
 )
 
 
-class MockMongoDb:
-    def insert_one(self, data):
-        raise SystemError()
-
-
 @pytest.mark.unit
 def test_get_all_videos_positive():
     """Test get all videos from database and list information"""

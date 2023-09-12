@@ -34,11 +34,6 @@ def is_valid_url(url: str):
     return bool(url_pattern.match(url))
 
 
-def regex_case_insensitive(word: str):
-    """Ignore uppercase, lowercase and accents"""
-    return re.compile(f"^{re.escape(word)}$", re.IGNORECASE)
-
-
 def returns_if_category_exists(title: str):
     """Check if category already exists"""
     # TODO: Utilizar REGEX para buscar tanto em uppercase como em lowercase
