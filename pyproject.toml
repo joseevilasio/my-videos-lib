@@ -37,7 +37,7 @@ include_trailing_comma = true
 [tool.poetry]
 name = "api"
 version = "0.1.0"
-description = "CRUD API"
+description = "CRUD API - My Videos LIB"
 authors = ["Jose Junior"]
 license = "unlicensed"
 readme = "README.md"
