@@ -5,17 +5,20 @@ from api.plugins import (
     returns_if_category_exists,
 )
 
-from pymongo.cursor import Cursor
-
 # CONTROLLER VIDEOS
 
 
 def get_all_videos() -> dict:
     """Get all videos from database and list information"""
     query = mongo.db.videos.find(projection={"_id": False})
+
     data = {}
     for video in query:
         data[f"{video['id']}"] = video
+
+    if not data:
+        raise FileNotFoundError("No videos found")
+
     return data
 
 
@@ -25,8 +28,10 @@ def get_video_by_id(video_id: int) -> dict:
     query = mongo.db.videos.find_one(
         {"id": video_id}, projection={"_id": False}
     )
+
     if query is None:
-        raise FileExistsError("Video not found")
+        raise FileNotFoundError("Video not found")
+
     return query
 
 
@@ -39,13 +44,13 @@ def add_new_video(data: dict) -> int:
         or data.get("description") is None
         or data.get("url") is None
     ):
-        raise FileExistsError("This field cannot be empty")
+        raise ValueError("This field cannot be empty")
 
     if len(data["title"].replace(" ", "")) <= 0:
-        raise FileExistsError("This field cannot be empty")
+        raise ValueError("This field cannot be empty")
 
     if len(data["description"].replace(" ", "")) <= 0:
-        raise FileExistsError("This field cannot be empty")
+        raise ValueError("This field cannot be empty")
 
     if is_valid_url(data["url"]) is False:
         raise ValueError("Url is invalid")
@@ -62,7 +67,6 @@ def add_new_video(data: dict) -> int:
             "categoryId": data["categoryId"],
         }
     )
-
     return id
 
 
@@ -72,8 +76,9 @@ def update_video(video_id: int, data) -> int:
     query = mongo.db.videos.find_one(
         {"id": video_id}, projection={"_id": False}
     )
+
     if query is None:
-        raise FileExistsError("Video not found")
+        raise FileNotFoundError("Video not found")
 
     if data.get("title") is None:
         data["title"] = query["title"]
@@ -92,30 +97,25 @@ def delete_video(video_id: int) -> str:
     """Delete one video by id"""
 
     if mongo.db.videos.delete_one({"id": video_id}).deleted_count == 1:
-        return f"Video {video_id} deleted"
-    raise FileExistsError("Video not found")
+        return "Video deleted"
+    raise FileNotFoundError("Video not found")
 
 
 def search_video(search: str) -> dict:
     """Search video by string match"""
-    
-    query = mongo.db.videos.find(
-        filter={"$or": [
-            {"title": {"$regex": rf"{search}", "$options": "i"}}
-        ]},
-        projection={"_id": False}
-    )
 
-    if not isinstance(query, Cursor):
-        raise Exception("Failed to retrieve search results")
+    query = mongo.db.videos.find(
+        filter={"$or": [{"title": {"$regex": rf"{search}", "$options": "i"}}]},
+        projection={"_id": False},
+    )
 
     data = {}
     for video in query:
-        data[f"{video['id']}"] = video  
+        data[f"{video['id']}"] = video
 
     if not data:
         raise FileNotFoundError(f"No videos found with '{search}'")
-    
+
     return data
 
 
@@ -126,9 +126,13 @@ def get_all_category():
     """Get all category from database and list information"""
 
     query = mongo.db.category.find(projection={"_id": False})
+
     data = {}
     for category in query:
         data[f"{category['id']}"] = category
+
+    if not data:
+        raise FileNotFoundError("No videos found")
 
     return data
 
@@ -139,27 +143,29 @@ def get_category_by_id(categoryId: int):
     query = mongo.db.category.find_one(
         {"id": categoryId}, projection={"_id": False}
     )
+
     if query is None:
-        raise FileExistsError("Category not found")
+        raise FileNotFoundError("Category not found")
+
     return query
 
 
-def add_new_category(data: dict):
+def add_new_category(data: dict) -> int:
     """Add new category on database"""
 
     id = get_next_sequence_value("category")
 
     if data.get("title") is None or data.get("color") is None:
-        raise FileExistsError("This field cannot be empty")
+        raise ValueError("This field cannot be empty")
 
     if len(data["title"].replace(" ", "")) <= 0:
-        raise FileExistsError("This field cannot be empty")
+        raise ValueError("This field cannot be empty")
 
     if returns_if_category_exists(data["title"]):
-        raise FileExistsError("Category already exists")
+        raise ValueError("Category already exists")
 
     if len(data["color"].replace(" ", "")) <= 0:
-        raise FileExistsError("This field cannot be empty")
+        raise ValueError("This field cannot be empty")
 
     mongo.db.category.insert_one(
         {
@@ -172,14 +178,15 @@ def add_new_category(data: dict):
     return id
 
 
-def update_category(categoryId: int, data: dict):
+def update_category(categoryId: int, data: dict) -> int:
     """Update category info on database"""
 
     query = mongo.db.category.find_one(
         {"id": categoryId}, projection={"_id": False}
     )
+
     if query is None:
-        raise FileExistsError("Category not found")
+        raise FileNotFoundError("Category not found")
 
     if data.get("title") is None:
         data["title"] = query["title"]
@@ -195,7 +202,7 @@ def delete_category(categoryId: int):
 
     if mongo.db.category.delete_one({"id": categoryId}).deleted_count == 1:
         return f"Category {categoryId} deleted"
-    raise FileExistsError("Category not found")
+    raise FileNotFoundError("Category not found")
 
 
 # CONTROLLER RELATIONSHIP
@@ -203,10 +210,16 @@ def delete_category(categoryId: int):
 
 def get_all_videos_by_category(categoryId: int):
     """Get all videos by category from database and list information"""
+
     query = mongo.db.videos.find(
         {"categoryId": f"{categoryId}"}, projection={"_id": False}
     )
+
     data = {}
     for video in query:
         data[f"{video['categoryId']}"] = video
+
+    if not data:
+        raise FileNotFoundError("No videos found")
+
     return data
