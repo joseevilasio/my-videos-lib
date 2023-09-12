@@ -5,6 +5,8 @@ from api.plugins import (
     returns_if_category_exists,
 )
 
+from pymongo.cursor import Cursor
+
 # CONTROLLER VIDEOS
 
 
@@ -96,18 +98,24 @@ def delete_video(video_id: int) -> str:
 
 def search_video(search: str) -> dict:
     """Search video by string match"""
-    # TODO: Resolver problema de exibição, return vazio
-    # TODO: regex funciona com texto exatamente igual
+    
     query = mongo.db.videos.find(
-        filter={"title": {"$regex": rf"{search}"}}, projection={"_id": False}
+        filter={"$or": [
+            {"title": {"$regex": rf"{search}", "$options": "i"}}
+        ]},
+        projection={"_id": False}
     )
 
-    if len(list(query)) == 0:
-        raise FileExistsError(f"Video not found with '{search}'")
+    if not isinstance(query, Cursor):
+        raise Exception("Failed to retrieve search results")
 
     data = {}
     for video in query:
-        data[f"{video['id']}"] = video
+        data[f"{video['id']}"] = video  
+
+    if not data:
+        raise FileNotFoundError(f"No videos found with '{search}'")
+    
     return data
 
 
