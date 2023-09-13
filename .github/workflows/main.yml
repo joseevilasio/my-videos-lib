@@ -88,7 +88,7 @@ jobs:
 
       - name: Print variable
         run: |
-          print('${{ env.TOKEN }}')
+          print('''${{ env.TOKEN }}''')
 
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml
