@@ -82,7 +82,7 @@ jobs:
       - name: Export variable
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: ${{matrix.python-version}}
         env:
           TOKEN: ${{ secrets.JWT_TOKEN_TEST }}
 
