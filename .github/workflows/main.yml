@@ -79,6 +79,13 @@ jobs:
       - name: Install Project 
         run: poetry install
 
+      - name: Export variable
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+        env:
+          TOKEN: ${{ secrets.JWT_TOKEN_TEST }}
+
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml
       - name: Run tests CI cov
