@@ -1,6 +1,5 @@
 from flask import Blueprint, Flask, abort, jsonify, redirect, request, url_for
 from flask_jwt_extended import jwt_required
-from flask_simplelogin import login_required
 
 from api.controller import (
     add_new_category,
@@ -28,61 +27,60 @@ def index():
 @bp.route("/videos")
 @jwt_required()
 def list_videos():
-    videos = get_all_videos()
-    if not videos:
+    try:
+        videos = get_all_videos()
+    except FileNotFoundError:
         return abort(404)
     return jsonify(videos), 200
 
 
 @bp.route("/videos/<int:video_id>")
+@jwt_required()
 def one_video(video_id):
     try:
         video = get_video_by_id(video_id)
-    except FileExistsError:
+    except FileNotFoundError:
         return abort(404)
     return jsonify(video), 200
 
 
 @bp.route("/videos/<int:video_id>", methods=["DELETE"])
-@login_required()
+@jwt_required()
 def delete_one_video(video_id):
-    video = get_video_by_id(video_id)
-    if not video:
+    try:
+        get_video_by_id(video_id)
+    except FileNotFoundError:
         return abort(404)
     else:
         exec_video = delete_video(video_id)
         return exec_video
 
 
-@bp.route("/videos/new", methods=["GET", "POST"])
-@login_required()
+@bp.route("/videos/new", methods=["POST"])
+@jwt_required()
 def new_video():
-    data = request.get_json()
-    video = add_new_video(data)
-    return redirect(url_for("api.one_video", video_id=video), 200)
+    data = request.get_json()   
+    video = add_new_video(data)   
+
+    return redirect(url_for("api.one_video", video_id=video)), 200
 
 
-@bp.route("/videos/<int:video_id>", methods=["GET", "PUT"])
-@login_required()
+@bp.route("/videos/<int:video_id>", methods=["PUT"])
+@jwt_required()
 def update_data_video(video_id):
     data = request.get_json()
     video = update_video(video_id, data)
-    return redirect(url_for("api.one_video", video_id=video), 200)
-
-
-@bp.route("/videos/<int:video_id>", methods=["GET", "PATCH"])
-@login_required()
-def update_partial_video(video_id):
-    data = request.get_json()
-    video = update_video(video_id, data)
-    return redirect(url_for("api.one_video", video_id=video), 200)
+    return redirect(url_for("api.one_video", video_id=video)), 200
 
 
 @bp.route("/videos/")
+@jwt_required()
 def search_video_query():
     search = request.args.get("search")
-    videos = search_video(search)
-    if not videos:
+
+    try:
+        videos = search_video(search)
+    except FileNotFoundError:
         return abort(404)
     return jsonify(videos), 200
 
@@ -91,26 +89,31 @@ def search_video_query():
 
 
 @bp.route("/category")
+@jwt_required()
 def list_category():
-    category = get_all_category()
-    if not category:
+    try:
+        category = get_all_category()
+    except FileNotFoundError:
         return abort(404)
     return jsonify(category), 200
 
 
 @bp.route("/category/<int:categoryId>")
+@jwt_required()
 def one_category(categoryId):
-    category = get_category_by_id(categoryId)
-    if not category:
+    try:
+        category = get_category_by_id(categoryId)
+    except FileNotFoundError:
         return abort(404)
     return jsonify(category), 200
 
 
 @bp.route("/category/<int:categoryId>", methods=["DELETE"])
-@login_required()
+@jwt_required()
 def delete_one_category(categoryId):
-    category = get_category_by_id(categoryId)
-    if not category:
+    try:
+        get_category_by_id(categoryId)
+    except FileNotFoundError:
         return abort(404)
     else:
         exec_category = delete_category(categoryId)
@@ -118,7 +121,7 @@ def delete_one_category(categoryId):
 
 
 @bp.route("/category/new", methods=["GET", "POST"])
-@login_required()
+@jwt_required()
 def new_category():
     data = request.get_json()
     category = add_new_category(data)
@@ -126,16 +129,8 @@ def new_category():
 
 
 @bp.route("/category/<int:categoryId>", methods=["GET", "PUT"])
-@login_required()
+@jwt_required()
 def update_data_category(categoryId):
-    data = request.get_json()
-    category = update_category(categoryId, data)
-    return redirect(url_for("api.one_category", categoryId=category), 200)
-
-
-@bp.route("/category/<int:categoryId>", methods=["GET", "PATCH"])
-@login_required()
-def update_partial_category(categoryId):
     data = request.get_json()
     category = update_category(categoryId, data)
     return redirect(url_for("api.one_category", categoryId=category), 200)
@@ -145,9 +140,11 @@ def update_partial_category(categoryId):
 
 
 @bp.route("/category/<int:categoryId>/videos", methods=["GET"])
+@jwt_required()
 def show_videos_by_category(categoryId):
-    videos_category = get_all_videos_by_category(categoryId)
-    if not videos_category:
+    try:
+        videos_category = get_all_videos_by_category(categoryId)
+    except FileNotFoundError:
         return abort(404)
     return jsonify(videos_category), 200
 
