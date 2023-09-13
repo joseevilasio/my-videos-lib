@@ -1,8 +1,8 @@
 import click
+from flask import Flask
 from flask_jwt_extended import create_access_token
 from flask_simplelogin import SimpleLogin
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask import Flask
 
 from api.database import mongo
 

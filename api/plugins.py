@@ -1,11 +1,10 @@
 import json
 import re
 
+from flask import Flask
 from flask_jwt_extended import JWTManager
 
 from api.database import mongo
-from flask import Flask
-
 
 jwt = JWTManager()
 

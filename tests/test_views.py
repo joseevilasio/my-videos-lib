@@ -109,15 +109,13 @@ def test_positive_new_video(client):
     """Test to check if new video route is return OK"""
 
     with open(VIDEO_FILE, "r") as content:
-
-
         response = client.post(
             "/videos/new",
             json=json.load(content),
             headers={
                 "Authorization": f"Bearer {TOKEN}",
                 "Content-Type": "application/json",
-            }
+            },
         )
 
         assert response.status_code == 200
@@ -265,7 +263,6 @@ def test_positive_new_category(client):
     """Test to check if new category route is return OK"""
 
     with open(CATEGORY_FILE, "r") as content:
-
         response = client.post(
             "/category/new",
             json=json.load(content),
@@ -291,9 +288,7 @@ def test_positive_update_data_category(client):
 
     data = {"title": "Terror"}
 
-    response = client.put(
-        "/category/1", json=data, headers=headers
-    )
+    response = client.put("/category/1", json=data, headers=headers)
 
     assert response.status_code == 200
     assert b"Redirecting" in response.data

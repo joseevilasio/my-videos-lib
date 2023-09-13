@@ -59,8 +59,8 @@ def delete_one_video(video_id):
 @bp.route("/videos/new", methods=["POST"])
 @jwt_required()
 def new_video():
-    data = request.get_json()   
-    video = add_new_video(data)   
+    data = request.get_json()
+    video = add_new_video(data)
 
     return redirect(url_for("api.one_video", video_id=video)), 200
 
