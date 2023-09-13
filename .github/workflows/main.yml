@@ -86,6 +86,10 @@ jobs:
         env:
           TOKEN: ${{ secrets.JWT_TOKEN_TEST }}
 
+      - name: Print variable
+        run: |
+          print('${{ env.TOKEN }}')
+
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml
       - name: Run tests CI cov
