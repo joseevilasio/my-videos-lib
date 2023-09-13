@@ -6,12 +6,14 @@ extensions = [
     "api.commands:configure",
     "api.views:configure",
     "api.admin:configure",
-    "api.auth:configure",
-    "api.plugins:configure"
+    "api.plugins:configure",
+    "api.auth:configure"
+    
 ]
-secret_key = "cbc3cc17474f1c72f7582286e4a127a82e94ee2d132b17d0b49a1908c4239aa6"
 FLASK_ADMIN_SWATCH = "minty"
-JWT_SECRET_KEY = "6938276b533c0c5df6288eb004225c1063b7634831c0e1cebb901c6bd36a2d03"
+secret_key = "settings.secrets.secret_key"
+JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
+TOKEN = "settings.secrets.TOKEN"
 
 [testing]
 VALUE = "On Testing"
@@ -20,6 +22,10 @@ extensions = [
     "api.database:configure",
     "api.commands:configure",
     "api.views:configure",
-    "api.admin:configure"
+    "api.admin:configure",
+    "api.plugins:configure",
+    "api.auth:configure"    
 ]
-secret_key = "cbc3cc17474f1c72f7582286e4a127a82e94ee2d132b17d0b49a1908c4239aa6"
+secret_key = "settings.secrets.secret_key"
+JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
+TOKEN = "settings.secrets.TOKEN"
