@@ -2,6 +2,7 @@ import click
 from flask_jwt_extended import create_access_token
 from flask_simplelogin import SimpleLogin
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask import Flask
 
 from api.database import mongo
 
@@ -40,7 +41,7 @@ def validate_login(data):
     return False
 
 
-def configure(app):
+def configure(app: Flask):
     SimpleLogin(app, login_checker=validate_login)
 
     @app.cli.command()

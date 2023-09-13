@@ -4,6 +4,8 @@ import re
 from flask_jwt_extended import JWTManager
 
 from api.database import mongo
+from flask import Flask
+
 
 jwt = JWTManager()
 
@@ -52,5 +54,5 @@ def convert_json_for_dict(data) -> dict:
     return data
 
 
-def configure(app):
+def configure(app: Flask):
     jwt.init_app(app)
