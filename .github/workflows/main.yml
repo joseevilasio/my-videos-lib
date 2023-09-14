@@ -84,12 +84,7 @@ jobs:
         with:
           python-version: ${{matrix.python-version}}
         env:
-          TOKEN: ${{ secrets.JWT_TOKEN_TEST }}
-
-      - name: Print variable
-        run: |
-          import os
-          print(os.getenv("TOKEN"))
+          TOKEN: ${{ env.TOKEN }}      
 
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml
