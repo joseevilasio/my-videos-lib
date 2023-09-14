@@ -84,7 +84,10 @@ jobs:
         with:
           python-version: ${{matrix.python-version}}
         env:
-          TOKEN: ${{ env.TOKEN }}      
+          TOKEN: ${{ env.TOKEN }}
+          
+      - name: Print variable
+        run: echo "${{ vars.TOKEN }}"
 
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml
