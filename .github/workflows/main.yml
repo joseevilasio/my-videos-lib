@@ -79,8 +79,21 @@ jobs:
       - name: Install Project 
         run: poetry install
 
+      - name: Set up environment variables
+        env:
+          TOKEN: ${{ secrets.JWT_TOKEN_TEST }}
+        run: echo "TOKEN -> $TOKEN"
+
+      - name: Run tests
+        run: |
+          echo "Running tests in current directory: $(pwd)"
+          ls -la  # List files in the current directory
+          echo "Environment variables in this scope: $(env)"
+          # ... rest of your test setup and execution
+
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml
+
       - name: Run tests CI cov
         run: make citest
 
