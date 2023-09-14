@@ -1,8 +1,10 @@
+import json
+
 import pytest
 
-from api.controller import add_new_video
+from api.controller import add_new_category, add_new_video
 from api.plugins import convert_json_for_dict
-from tests.constants import VIDEO_FILE, VIDEO_FILE_2
+from tests.constants import CATEGORY_FILE, TOKEN, VIDEO_FILE, VIDEO_FILE_2
 
 
 @pytest.mark.integration
@@ -24,90 +26,303 @@ def test_route_negative(client):
 
 
 @pytest.mark.integration
-def test_list_videos_positive(client):
+def test_positive_list_videos(client):
     """Test to check if list videos route is return OK"""
 
-    data = convert_json_for_dict(VIDEO_FILE)
-    insert_video = add_new_video(data)
+    add_new_video(convert_json_for_dict(VIDEO_FILE))
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    print(TOKEN)
 
-    response = client.get("/videos")
-    assert insert_video is not None
+    response = client.get("/videos", headers=headers)
     assert response.status_code == 200
 
 
 @pytest.mark.integration
+def test_negative_list_videos(client):
+    """Test negative to check if list videos route is return OK"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response = client.get("/videos", headers=headers)
+    assert response.status_code == 404
+
+
+@pytest.mark.integration
 def test_one_video_positive_data(client):
-    """Test to check if one video route is return OK"""
+    """Test to check if one video route is return 404"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
 
     add_new_video(convert_json_for_dict(VIDEO_FILE))
     add_new_video(convert_json_for_dict(VIDEO_FILE_2))
 
-    response_1 = client.get("/videos/1")
-    response_2 = client.get("/videos/2")
+    response_1 = client.get("/videos/1", headers=headers)
+    response_2 = client.get("/videos/2", headers=headers)
 
     assert response_1.status_code == 200
-    assert response_1.status_code == 200
+    assert response_2.status_code == 200
     assert b"Git e Github para iniciantes" in response_1.data
     assert b"https://www.youtube.com/watch?v=8485663" in response_2.data
 
 
 @pytest.mark.integration
-def test_delete_one_video(client):
+def test_one_video_negative_data(client):
+    """Test negative to check if one video route is return 404"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response_1 = client.get("/videos/1", headers=headers)
+    response_2 = client.get("/videos/2", headers=headers)
+
+    assert response_1.status_code == 404
+    assert response_2.status_code == 404
+
+
+@pytest.mark.integration
+def test_positive_delete_one_video(client):
     """Test to check if delete one video route is return OK"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
 
     add_new_video(convert_json_for_dict(VIDEO_FILE))
 
-    response_delete = client.delete("/videos/1")
-    response_get = client.get("/videos/1")
+    response_delete = client.delete("/videos/1", headers=headers)
+    response_get = client.get("/videos/1", headers=headers)
 
     assert response_delete.status_code == 200
     assert response_get.status_code == 404
 
 
-# @pytest.mark.integration
-# def test_new_video(client):
-#     """Test to check if new video route is return OK"""
+@pytest.mark.integration
+def test_negative_delete_one_video(client):
+    """Test negative to check if delete one video route is return 404"""
 
-#     response = client.post(
-#         "/videos/new",
-#         json=VIDEO_FILE,
-#         headers={"Content-Type": "application/json"}
-#     )
+    headers = {"Authorization": f"Bearer {TOKEN}"}
 
-#     assert response.status_code == 200
-#     assert b"1" in response.data
+    response_delete = client.delete("/videos/1", headers=headers)
+
+    assert response_delete.status_code == 404
 
 
-# def test_update_data_video(client):
-#     """Test to check if update video route is return OK"""
+@pytest.mark.integration
+def test_positive_new_video(client):
+    """Test to check if new video route is return OK"""
 
-#     insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
-#     assert insert_data == 1
+    with open(VIDEO_FILE, "r") as content:
+        response = client.post(
+            "/videos/new",
+            json=json.load(content),
+            headers={
+                "Authorization": f"Bearer {TOKEN}",
+                "Content-Type": "application/json",
+            },
+        )
 
-#     data = {"title": "Aprenda GIT/GITHUB em 15 minutos"}
-
-#     response = client.put("/videos/1", json=json.dumps(data))
-
-#     assert response.status_code == 200
-#     assert b"Aprenda GIT/GITHUB em 15 minutos" in response.data
+        assert response.status_code == 200
+        assert b"Redirecting" in response.data
+        assert response.headers["Location"] == "/videos/1"
 
 
-# def test_update_partial_video(client):
-#     """Test to check if update partial video route is return OK"""
+@pytest.mark.integration
+def test_positive_update_data_video(client):
+    """Test to check if update video route is return OK"""
 
-#     with get_session() as session:
-#         add_new_video(VIDEO_FILE)
-#         result_after = session.exec(select(Video)).first()
-#         assert result_after is not None
+    insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
+    assert insert_data == 1
 
-#         data = {
-#             "title": "Aprenda GIT/GITHUB em 15 minutos",
-#         }
+    data = {"title": "Aprenda GIT/GITHUB em 15 minutos"}
 
-#         response_patch = client.patch("/videos/1", json=json.dumps(data))
+    response = client.put(
+        "/videos/1",
+        json=data,
+        headers={
+            "Authorization": f"Bearer {TOKEN}",
+            "Content-Type": "application/json",
+        },
+    )
 
-#         result_before = session.exec(select(Video.title)).first()
+    assert response.status_code == 200
+    assert b"Redirecting" in response.data
+    assert response.headers["Location"] == "/videos/1"
 
-#         assert result_before == "Aprenda GIT/GITHUB em 15 minutos"
-#         assert response_patch.status_code == 200
-#         assert b"updated with success" in response_patch.data
+
+@pytest.mark.integration
+def test_positive_search_video_query(client):
+    """Test to check if search video route is return OK"""
+
+    insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
+    assert insert_data == 1
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    word = "github"
+
+    response = client.get(f"/videos/?search={word}", headers=headers)
+
+    assert response.status_code == 200
+    assert (
+        b"Aprenda a usar o Git e Github com os cursos da Alura"
+        in response.data
+    )
+
+
+@pytest.mark.integration
+def test_negative_search_video_query(client):
+    """Test to check if search video route is return OK"""
+
+    insert_data = add_new_video(convert_json_for_dict(VIDEO_FILE))
+    assert insert_data == 1
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    word = "carro"
+
+    response = client.get(f"/videos/?search={word}", headers=headers)
+    print(response.data)
+
+    assert response.status_code == 404
+
+
+# CATEGORY TEST
+
+
+@pytest.mark.integration
+def test_positive_list_category(client):
+    """Test to check if list category route is return OK"""
+
+    add_new_category(convert_json_for_dict(CATEGORY_FILE))
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response = client.get("/category", headers=headers)
+    assert response.status_code == 200
+
+
+@pytest.mark.integration
+def test_negative_list_category(client):
+    """Test negative to check if list category route is return 404"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response = client.get("/category", headers=headers)
+    assert response.status_code == 404
+
+
+@pytest.mark.integration
+def test_positive_one_category_data(client):
+    """Test to check if one category route is return OK"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    add_new_category(convert_json_for_dict(CATEGORY_FILE))
+
+    response = client.get("/category/1", headers=headers)
+
+    assert response.status_code == 200
+    assert b"Humor" in response.data
+
+
+@pytest.mark.integration
+def test_negative_one_category_data(client):
+    """Test negative to check if one category route is return 404"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response = client.get("/category/1", headers=headers)
+
+    assert response.status_code == 404
+
+
+@pytest.mark.integration
+def test_positive_delete_one_category(client):
+    """Test to check if delete one category route is return OK"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    add_new_category(convert_json_for_dict(CATEGORY_FILE))
+
+    response_delete = client.delete("/category/1", headers=headers)
+    response_get = client.get("/category/1", headers=headers)
+
+    assert response_delete.status_code == 200
+    assert response_get.status_code == 404
+
+
+@pytest.mark.integration
+def test_negative_delete_one_category(client):
+    """Test negative to check if delete one category route is return 404"""
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response_delete = client.delete("/category/1", headers=headers)
+
+    assert response_delete.status_code == 404
+
+
+@pytest.mark.integration
+def test_positive_new_category(client):
+    """Test to check if new category route is return OK"""
+
+    with open(CATEGORY_FILE, "r") as content:
+        response = client.post(
+            "/category/new",
+            json=json.load(content),
+            headers={
+                "Authorization": f"Bearer {TOKEN}",
+                "Content-Type": "application/json",
+            },
+        )
+
+        assert response.status_code == 200
+        assert b"Redirecting" in response.data
+        assert response.headers["Location"] == "/category/1"
+
+
+@pytest.mark.integration
+def test_positive_update_data_category(client):
+    """Test to check if update category route is return OK"""
+
+    insert_data = add_new_category(convert_json_for_dict(CATEGORY_FILE))
+    assert insert_data == 1
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    data = {"title": "Terror"}
+
+    response = client.put("/category/1", json=data, headers=headers)
+
+    assert response.status_code == 200
+    assert b"Redirecting" in response.data
+    assert response.headers["Location"] == "/category/1"
+
+
+@pytest.mark.integration
+def test_positive_show_videos_by_category(client):
+    """Test to check if show videos by category route is return OK"""
+
+    insert_category = add_new_category(convert_json_for_dict(CATEGORY_FILE))
+    insert_video = add_new_video(convert_json_for_dict(VIDEO_FILE))
+
+    assert insert_category == 1
+    assert insert_video == 1
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response = client.get("/category/1/videos", headers=headers)
+
+    assert response.status_code == 200
+    assert b"Git e Github para iniciantes" in response.data
+
+
+@pytest.mark.integration
+def test_negative_show_videos_by_category(client):
+    """Test to check if show videos by category route is return OK"""
+
+    insert_category = add_new_category(convert_json_for_dict(CATEGORY_FILE))
+
+    assert insert_category == 1
+
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    response = client.get("/category/1/videos", headers=headers)
+
+    assert response.status_code == 404

@@ -59,7 +59,7 @@ def delete(id):
 
 
 @controller.command("update-video")
-@click.argument("id", type=click.INT, required=True)
+@click.argument("id", type=click.STRING, required=True)
 @click.argument("data", required=False)
 def update(id, data):
     """Update video infor on database"""

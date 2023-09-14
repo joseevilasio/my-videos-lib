@@ -37,7 +37,7 @@ include_trailing_comma = true
 [tool.poetry]
 name = "api"
 version = "0.1.0"
-description = "CRUD API"
+description = "CRUD API - My Videos LIB"
 authors = ["Jose Junior"]
 license = "unlicensed"
 readme = "README.md"
@@ -47,6 +47,9 @@ python = "^3.8.1"
 flask = "^2.2.3"
 dynaconf = "^3.1.12"
 flask-pymongo = "^2.3.0"
+flask-admin = "^1.6.1"
+flask-simplelogin = "^0.1.2"
+flask-jwt-extended = "^4.5.2"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -58,6 +61,7 @@ pyproject-flake8 = "^6.0.0.post1"
 pytest-cov = "^4.0.0"
 pytest-flask = "^1.2.0"
 pytest-forked = "^1.6.0"
+flask-shell-ipython = "^0.5.1"
 
 [build-system]
 requires = ["poetry-core"]

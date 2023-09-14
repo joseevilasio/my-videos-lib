@@ -4,9 +4,16 @@ mongo_uri = "mongodb://localhost:27017/myvideoslib"
 extensions = [
     "api.database:configure",
     "api.commands:configure",
-    "api.views:configure"
+    "api.views:configure",
+    "api.admin:configure",
+    "api.plugins:configure",
+    "api.auth:configure"
+    
 ]
-
+FLASK_ADMIN_SWATCH = "minty"
+secret_key = "settings.secrets.secret_key"
+JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
+TOKEN = "settings.secrets.TOKEN"
 
 [testing]
 VALUE = "On Testing"
@@ -14,5 +21,11 @@ mongo_uri = "mongodb://localhost:27017/database_test"
 extensions = [
     "api.database:configure",
     "api.commands:configure",
-    "api.views:configure"
+    "api.views:configure",
+    "api.admin:configure",
+    "api.plugins:configure",
+    "api.auth:configure"    
 ]
+secret_key = "settings.secrets.secret_key"
+JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
+TOKEN = "settings.secrets.TOKEN"

@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ['3.9', '3.10']
+        python-version: ['3.9']
         os: [ubuntu-latest]
     runs-on: ${{matrix.os}}
 
@@ -78,6 +78,17 @@ jobs:
 
       - name: Install Project 
         run: poetry install
+
+      - name: Export variable
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{matrix.python-version}}
+        env:
+          TOKEN: ${{ env.TOKEN }}
+          
+      - name: Print variable
+        run: echo "${{ env.TOKEN }}"
+        run: echo "${{ env.TOKEN_TESTE}}"
 
       - name: Run tests         
         run: poetry run pytest -v --forked --junitxml=test-result.xml

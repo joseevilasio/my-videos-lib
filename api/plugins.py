@@ -1,7 +1,12 @@
 import json
 import re
 
+from flask import Flask
+from flask_jwt_extended import JWTManager
+
 from api.database import mongo
+
+jwt = JWTManager()
 
 
 def get_next_sequence_value(db_name: str):
@@ -30,11 +35,6 @@ def is_valid_url(url: str):
     return bool(url_pattern.match(url))
 
 
-def regex_case_insensitive(word: str):
-    """Ignore uppercase, lowercase and accents"""
-    return re.compile(f"^{re.escape(word)}$", re.IGNORECASE)
-
-
 def returns_if_category_exists(title: str):
     """Check if category already exists"""
     # TODO: Utilizar REGEX para buscar tanto em uppercase como em lowercase
@@ -51,3 +51,7 @@ def convert_json_for_dict(data) -> dict:
         data = json.load(data_json)
 
     return data
+
+
+def configure(app: Flask):
+    jwt.init_app(app)
