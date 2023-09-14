@@ -88,6 +88,7 @@ jobs:
           
       - name: Print variable
         run: echo "${{ env.TOKEN }}"
+      - name: Print variable test
         run: echo "${{ env.TOKEN_TESTE}}"
 
       - name: Run tests         
