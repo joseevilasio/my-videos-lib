@@ -4,7 +4,12 @@ import pytest
 
 from api.controller import add_new_category, add_new_video
 from api.plugins import convert_json_for_dict
-from tests.constants import CATEGORY_FILE, JWT_TOKEN_TEST, VIDEO_FILE, VIDEO_FILE_2
+from tests.constants import (
+    CATEGORY_FILE,
+    JWT_TOKEN_TEST,
+    VIDEO_FILE,
+    VIDEO_FILE_2,
+)
 
 
 @pytest.mark.integration
