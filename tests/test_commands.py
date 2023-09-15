@@ -2,6 +2,7 @@ import pytest
 from click.testing import CliRunner
 
 from api.commands import (
+    add_user,
     delete,
     delete_category_by_id,
     new_category,
@@ -16,6 +17,7 @@ from api.commands import (
     update_category_by_id,
 )
 from api.controller import add_new_category, add_new_video
+from api.database import mongo
 from api.plugins import convert_json_for_dict
 from tests.constants import (
     CATEGORY_FILE,
@@ -174,3 +176,18 @@ def test_show_videos_by_category_positive():
 
     assert out.exit_code == 0
     assert "Git e Github para iniciantes" in out.output
+
+
+@pytest.mark.integration
+def test_add_user():
+    """Test Creates a new user"""
+
+    out = cmd.invoke(add_user, ["admin"], input="123456\n123456\n")
+
+    username = mongo.db.users.find_one(
+        {"username": "admin"}, projection={"_id": False}
+    )["username"]
+
+    assert out.exit_code == 0
+    assert f"User created - admin" in out.output
+    assert "admin" == username
