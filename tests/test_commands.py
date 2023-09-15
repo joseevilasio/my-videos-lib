@@ -189,5 +189,5 @@ def test_add_user():
     )["username"]
 
     assert out.exit_code == 0
-    assert f"User created - admin" in out.output
+    assert "User created - admin" in out.output
     assert "admin" == username
