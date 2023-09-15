@@ -1,4 +1,3 @@
-import click
 from flask import Flask
 from flask_jwt_extended import create_access_token
 from flask_simplelogin import SimpleLogin
@@ -43,11 +42,3 @@ def validate_login(data):
 
 def configure(app: Flask):
     SimpleLogin(app, login_checker=validate_login)
-
-    @app.cli.command()
-    @click.argument("username")
-    @click.password_option()
-    def add_user(username, password):
-        """Creates a new user"""
-        user = create_user(username=username, password=password)
-        click.echo(f"User created - {user['username']}")

@@ -3,6 +3,7 @@ import json
 import click
 from flask import Flask
 
+from api.auth import create_user
 from api.controller import (
     add_new_category,
     add_new_video,
@@ -22,6 +23,20 @@ from api.controller import (
 @click.group()
 def controller():
     """Manage >> MyVideosLIB API <<"""
+
+
+@click.group()
+def add_user():
+    """Manage User >> MyVideosLIB API <<"""
+
+
+@add_user.command("add-user")
+@click.argument("username")
+@click.password_option()
+def add_user(username, password):
+    """Creates a new user"""
+    user = create_user(username=username, password=password)
+    click.echo(f"User created - {user['username']}")
 
 
 @controller.command("show")
@@ -141,3 +156,4 @@ def show_videos_by_category(id):
 
 def configure(app: Flask):
     app.cli.add_command(controller)
+    app.cli.add_command(add_user)
