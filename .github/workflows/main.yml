@@ -77,12 +77,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: Install Project 
-        run: poetry install
-      
-      - name: Set up environment variables
-        env:
-          JWT_TOKEN_TEST: ${{ secrets.JWT_TOKEN_TEST }}
-        run: echo "TOKEN -> $JWT_TOKEN_TEST"
+        run: poetry install 
 
       - name: Run tests
         run: poetry run pytest -v --forked --junitxml=test-result.xml
