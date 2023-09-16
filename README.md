@@ -3,15 +3,24 @@
 
 # MY VIDEOS LIB - CRUD - ALURA CHALLENGE 
 
+Uma bibiclioteca para armazenar as informações sobre os seus vídeos favoritos. O projeto faz parte de um desafio da Alura. 
+Para saber mais sobre o desafio,  clique aqui.
+
 | :placard: Vitrine.Dev |   [Vitrine Dev José Junior](https://cursos.alura.com.br/vitrinedev/joseevilasio/project/CRUD-Challenge-Alura/3844433) |
 | -------------  | --- |
 | :sparkles: Nome        | **Challenge Alura - REST API - CRUD**
-| :label: Tecnologias | python, flask, nosql
-| :rocket: URL         | https://github.com/joseevilasio/CRUD-Challenge-Alura
+| :label: Tecnologias | python, flask, mongodb, dynaconf
+| :rocket: URL         | https://github.com/joseevilasio/my-videos-lib
 | :fire: Desafio     | [Alura](https://www.alura.com.br/challenges/back-end-5/semana-01-implementando-api-rest?utm_source=ActiveCampaign&utm_medium=email&utm_content=%5BChallenge+Back-End%5D+Comece+agora%21&utm_campaign=%5BCHALLANGE%5D+%28Back-End+5a+ed+%29+Liberação+da+aula+01++%2B+convite+live+dive+coding&vgo_ee=kJRPc3gXJKD3%2FdmGS%2B55mMe9HldV2%2BVjsIQZGqVXtPc%3D)
 
 <!-- Inserir imagem com a #vitrinedev ao final do link -->
 ![](https://github.com/joseevilasio/CRUD-Challenge-Alura/blob/main/assets/%20thumbnail.gif)
+
+## 🚀 Começando
+
+
+
+##  Começando
 
 O desafio consiste em criar um CRUD (Create, Read, Update, Delete)
 
