@@ -1,14 +1,14 @@
 [![CI](https://github.com/joseevilasio/my-videos-lib/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/joseevilasio/my-videos-lib/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/joseevilasio/CRUD-Challenge-Alura/graph/badge.svg?token=VK8Z1CJZ6J)](https://codecov.io/gh/joseevilasio/CRUD-Challenge-Alura)
 
-# MY VIDEOS LIB - CRUD - ALURA CHALLENGE 
+# MY VIDEOS LIB - API CRUD - ALURA CHALLENGE 
 
 Uma bibiclioteca para armazenar as informações sobre os seus vídeos favoritos. O projeto faz parte de um desafio da Alura. 
-Para saber mais sobre o desafio,  clique aqui.
+Para saber mais sobre o desafio, [clique aqui.](#-desafio)
 
 | :placard: Vitrine.Dev |   [Vitrine Dev José Junior](https://cursos.alura.com.br/vitrinedev/joseevilasio/project/CRUD-Challenge-Alura/3844433) |
 | -------------  | --- |
-| :sparkles: Nome        | **Challenge Alura - REST API - CRUD**
+| :sparkles: Nome        | **MY VIDEOS LIB - API - CRUD**
 | :label: Tecnologias | python, flask, mongodb, dynaconf
 | :rocket: URL         | https://github.com/joseevilasio/my-videos-lib
 | :fire: Desafio     | [Alura](https://www.alura.com.br/challenges/back-end-5/semana-01-implementando-api-rest?utm_source=ActiveCampaign&utm_medium=email&utm_content=%5BChallenge+Back-End%5D+Comece+agora%21&utm_campaign=%5BCHALLANGE%5D+%28Back-End+5a+ed+%29+Liberação+da+aula+01++%2B+convite+live+dive+coding&vgo_ee=kJRPc3gXJKD3%2FdmGS%2B55mMe9HldV2%2BVjsIQZGqVXtPc%3D)
@@ -16,11 +16,26 @@ Para saber mais sobre o desafio,  clique aqui.
 <!-- Inserir imagem com a #vitrinedev ao final do link -->
 ![](https://github.com/joseevilasio/CRUD-Challenge-Alura/blob/main/assets/%20thumbnail.gif)
 
-## 🚀 Começando
+### 📋 Pré-requisitos
 
+```
+Python
+```
+```
+Poetry
+```
+```
+Docker
+```
+### 🔧 Instalação
 
+Fazer o 'fork' do projeto ou fazer o donwload dos arquivos para um pasta. Utilizar o poetry para instalar as dependências.
 
-##  Começando
+## 📦 Utilização
+
+Utilização, é possível gerenciar aplicação atŕaves da linha de comando ou diretamente no navegedar ao rodar o servidor local.
+
+## 💡 Desafio
 
 O desafio consiste em criar um CRUD (Create, Read, Update, Delete)
 
@@ -34,9 +49,9 @@ Exemplo: Não iniciado ❌ / Iniciado ✅
 ## Semana 2 - Adicionando entidades e relacionamentos  ✅
 **Implementação de Categorias:** Adicionar table em database com categoria e relacionar com database já existente e rotear novas rotas.  🔍[https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/2#issue-1629629636]
 
-## Semana 3 - Implementando serviços de autenticação ❌
-  **Segurança:** Nesta semana, o desafio será implementar um mecanismo de autenticação na API, para que apenas usuários autenticados possam interagir com ela. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/3#issue-1638409239]
+## Semana 3 - Implementando serviços de autenticação ✅
+**Segurança:** Nesta semana, o desafio será implementar um mecanismo de autenticação na API, para que apenas usuários autenticados possam interagir com ela. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/3#issue-1638409239]
 
 ## Semana 4 - Deploy ❌
- **Deploy:** Será necessário realizar o deploy da API em algum provedor Cloud, como o Heroku. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/3#issue-1638409239]
+**Deploy:** Será necessário realizar o deploy da API em algum provedor Cloud, como o Heroku. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/3#issue-1638409239]
  
