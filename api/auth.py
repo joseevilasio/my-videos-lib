@@ -1,9 +1,11 @@
 from flask import Flask
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import JWTManager, create_access_token
 from flask_simplelogin import SimpleLogin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from api.database import mongo
+
+jwt = JWTManager()
 
 
 def create_token(username: str) -> str:
@@ -41,4 +43,5 @@ def validate_login(data):
 
 
 def configure(app: Flask):
+    jwt.init_app(app)
     SimpleLogin(app, login_checker=validate_login)

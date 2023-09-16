@@ -1,15 +1,17 @@
 [default]
+
 VALUE = "On Default"
+
 mongo_uri = "mongodb://localhost:27017/myvideoslib"
+
 extensions = [
     "api.database:configure",
+    "api.auth:configure",
     "api.commands:configure",
     "api.views:configure",
-    "api.admin:configure",
-    "api.plugins:configure",
-    "api.auth:configure"
-    
+    "api.admin:configure"    
 ]
+
 FLASK_ADMIN_SWATCH = "minty"
 secret_key = "settings.secrets.secret_key"
 JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
@@ -23,8 +25,7 @@ extensions = [
     "api.commands:configure",
     "api.views:configure",
     "api.admin:configure",
-    "api.plugins:configure",
-    "api.auth:configure"    
+    "api.auth:configure"
 ]
 secret_key = "settings.secrets.secret_key"
 JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
