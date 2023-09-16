@@ -5,7 +5,7 @@ from api.database import mongo
 
 
 @pytest.mark.integration
-def test_create_user_positive():
+def test_create_user_positive(request_ctx):
     """Test creates user with encrypted password"""
 
     create_user(username="admin", password="123456")
@@ -56,7 +56,7 @@ def test_validate_login_negative_without_password():
 
 
 @pytest.mark.integration
-def test_validate_login_positive():
+def test_validate_login_positive(request_ctx):
     """Test Check that incoming credentials matches
     database stored credentials."""
 
@@ -69,7 +69,7 @@ def test_validate_login_positive():
 
 
 @pytest.mark.integration
-def test_validate_login_negative_wrong_password():
+def test_validate_login_negative_wrong_password(request_ctx):
     """Test Check that incoming credentials matches
     database stored credentials."""
 

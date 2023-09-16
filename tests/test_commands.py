@@ -179,7 +179,7 @@ def test_show_videos_by_category_positive():
 
 
 @pytest.mark.integration
-def test_add_user():
+def test_add_user(request_ctx):
     """Test Creates a new user"""
 
     out = cmd.invoke(add_user, ["admin"], input="123456\n123456\n")
