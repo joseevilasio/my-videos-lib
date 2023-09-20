@@ -10,6 +10,7 @@ from api.controller import (
     get_all_videos_by_category,
     get_category_by_id,
     get_video_by_id,
+    init_category,
     search_video,
     update_category,
     update_video,
@@ -22,6 +23,15 @@ from tests.constants import (
     VIDEO_FILE_4_ERRO,
     VIDEO_FILE_5_ERRO,
 )
+
+
+@pytest.mark.unit
+def test_init_category():
+    """Test create free category if it doesn't exist"""
+
+    init_category()
+
+    assert get_category_by_id(1)["title"] == "livre"
 
 
 @pytest.mark.unit
@@ -171,7 +181,7 @@ def test_add_new_video_positve_without_category():
     }
 
     assert add_new_video(data) == 1
-    assert get_video_by_id(1).get("categoryId") is None
+    assert get_video_by_id(1).get("categoryId") is 1
 
 
 @pytest.mark.unit

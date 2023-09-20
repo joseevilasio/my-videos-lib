@@ -1,8 +1,11 @@
 # Makefile
-.PHONY: install update env set-app ipython clean test pflake8 fmt lint watch docs docs-serve build publish code-coverage
+.PHONY: install install-without-dev update env set-app ipython clean test pflake8 fmt lint watch docs docs-serve build publish code-coverage
 
 install:
 	@poetry install
+
+install-without-dev:
+	@poetry install without dev
 
 update:
 	@poetry update

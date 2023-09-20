@@ -8,6 +8,22 @@ from api.plugins import (
 # CONTROLLER VIDEOS
 
 
+def init_category():
+    """Create free category if it doesn't exist"""
+
+    query = mongo.db.category.find_one({"id": 1}, projection={"_id": False})
+
+    if query is None:
+        id = get_next_sequence_value("category")
+        mongo.db.category.insert_one(
+            {
+                "id": id,  # insert auto increment
+                "title": "livre",
+                "color": "branco",
+            }
+        )
+
+
 def get_all_videos() -> dict:
     """Get all videos from database and list information"""
     query = mongo.db.videos.find(projection={"_id": False})
@@ -37,6 +53,9 @@ def get_video_by_id(video_id: int) -> dict:
 
 def add_new_video(data: dict) -> int:
     """Add new video on database"""
+
+    init_category()
+
     id = get_next_sequence_value("videos")
 
     if (
@@ -56,7 +75,7 @@ def add_new_video(data: dict) -> int:
         raise ValueError("Url is invalid")
 
     if data.get("categoryId") is None:
-        data["categoryId"] = None
+        data["categoryId"] = 1
 
     mongo.db.videos.insert_one(
         {
