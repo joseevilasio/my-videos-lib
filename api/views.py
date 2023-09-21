@@ -1,6 +1,16 @@
-from flask import Blueprint, Flask, abort, jsonify, redirect, request, url_for
+from flask import (
+    Blueprint,
+    Flask,
+    abort,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 from flask_jwt_extended import jwt_required
 
+from api.auth import create_user
 from api.controller import (
     add_new_category,
     add_new_video,
@@ -16,12 +26,31 @@ from api.controller import (
     update_video,
 )
 
-bp = Blueprint("api", __name__)
+bp = Blueprint(
+    "api", __name__, template_folder="templates", static_url_path="static"
+)
 
 
 @bp.route("/")
 def index():
     return "Hello, World! MyVideosLIB API", 200
+
+
+@bp.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        data = {"username": username, "password": password}
+
+        try:
+            create_user(**data)
+        except ValueError:
+            return abort(404)
+
+        return redirect(url_for("api.index"))
+
+    return render_template("register.html.j2"), 200
 
 
 @bp.route("/videos")
