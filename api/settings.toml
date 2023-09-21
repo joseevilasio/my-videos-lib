@@ -2,7 +2,7 @@
 
 VALUE = "On Default"
 
-mongo_uri = "mongodb://localhost:27017/myvideoslib"
+mongo_uri = "mongodb://mongodb:27017/myvideoslib"
 
 extensions = [
     "api.database:configure",
