@@ -28,7 +28,7 @@ class CategoryForm(form.Form):
     id = fields.HiddenField("id")
 
 
-class AdminPosts(ModelView):
+class AdminVideos(ModelView):
     column_list = ("id", "title", "url", "categoryId")
     form = VideosForm
 
@@ -55,5 +55,5 @@ def configure(app):
             "FLASK_ADMIN_TEMPLATE_MODE", "bootstrap4"
         ),
     )
-    app.admin.add_view(AdminPosts(mongo.db.videos, "Videos"))
+    app.admin.add_view(AdminVideos(mongo.db.videos, "Videos"))
     app.admin.add_view(AdminCategory(mongo.db.category, "Category"))
