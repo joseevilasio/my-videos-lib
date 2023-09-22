@@ -20,22 +20,81 @@ Para saber mais sobre o desafio, [clique aqui.](#-desafio)
 
 ```
 Python
-```
-```
 Poetry
-```
-```
 Docker
 ```
 ### 🔧 Instalação
 
-Fazer o 'fork' do projeto ou fazer o donwload dos arquivos para um pasta. Utilizar o poetry para instalar as dependências.
+Fazer um clone do repositório do projeto:
+```
+$ gh repo clone joseevilasio/my-videos-lib
+```
+Instalar as dependências do projeto com o Poetry:
+```
+$ poetry install
+```
+O projeto utiliza mongoDB como banco de dados, é precisor iniciar um container:
+```
+$ docker container run -d -p 27017:27017 --name mongo-myvideoslib mongo:latest
+```
+Agora é rodar o projeto em localhost para gerenciar e consumir a API:
+```
+$ poetry run gunicorn -w 4 'api.app:create_app()'
+```
+Uma outra opção para gerenciar a API atráves da linha de comando:
+```
+$ poetry run flask controller --help
+```
 
-## 📦 Utilização
+### 🔧 Instalação Docker Compose
+Para instalação com o Docker basta utilizar o Docker compose:
+```
+$ sudo docker compose up --build
+```
 
-Utilização, é possível gerenciar aplicação atŕaves da linha de comando ou diretamente no navegedar ao rodar o servidor local.
+### 📦 Como funciona
+É preciso criar um conta para utilizar a aplicação, é possível fazer isso através do CLI e ```/register``` com a conta criada terá acesso ao ```token```, para utilizar nas requisições, ao acessar ```/admin```.
 
-## 💡 Desafio
+Consumindo a API:
+
+CREATE - POST ```/videos/new``` adicionar um video no banco de dados.
+
+exemplo json:
+```
+{       
+    "title": "Introdução à programação Python",
+    "description": "Comece a aprender Python com a Alura",
+    "url": "https://www.youtube.com/watch?v=8485663",
+    "categoryId": "1"
+}
+```
+CREATE - POST ```/category/new``` adicionar uma categoria no banco de dados.
+exemplo json :
+```
+{       
+    "title": "Game",
+    "color": "red",
+}
+```
+
+READ - GET ```/videos``` devolve um json com todos os videos no banco de dados, outra forma é ```/videos/id``` repassar o id do video.
+
+READ - GET ```/videos/?search=game``` devolve um json com todos os videos no banco de dados relacionado com o termo procurado.
+
+READ - GET ```/category``` devolve um json com todas as categorias no banco de dados, outra forma é ```/category/id``` repassar o id da categoria.
+
+READ - GET ```/category/id/videos``` devolve um json com todas videos relacionado a categoria indicado com id.
+
+UPDATE - PUT ```/videos/id``` atualiza as informações o video.
+
+UPDATE - PUT ```/category/id``` atualiza as informações da categoria.
+
+DELETE - DELETE ```/videos/id``` deleta o video.
+
+DELETE - DELETE ```/category/id``` deleta a categoria.
+
+
+### 💡 Desafio
 
 O desafio consiste em criar um CRUD (Create, Read, Update, Delete)
 
