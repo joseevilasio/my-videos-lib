@@ -9,6 +9,7 @@ from flask import (
     url_for,
 )
 from flask_jwt_extended import jwt_required
+from flask_simplelogin import get_username, login_required
 
 from api.auth import create_user
 from api.controller import (
@@ -25,6 +26,7 @@ from api.controller import (
     update_category,
     update_video,
 )
+from api.database import mongo
 
 bp = Blueprint(
     "api", __name__, template_folder="templates", static_url_path="static"
@@ -48,9 +50,20 @@ def register():
         except ValueError:
             return abort(404)
 
-        return redirect(url_for("api.index"))
+        return redirect(url_for("admin.index"))
 
-    return render_template("register.html.j2"), 200
+    return render_template("register2.html.j2"), 200
+
+
+@bp.route("/token")
+@login_required()
+def token():
+    usarname = get_username()
+
+    token = mongo.db.users.find_one(
+        {"username": usarname}, projection={"_id": False}
+    )["token"]
+    return render_template("token.html.j2", data=token), 200
 
 
 @bp.route("/videos")
