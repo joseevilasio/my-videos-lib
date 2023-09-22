@@ -15,7 +15,7 @@ def test_index_positive(client):
 
     response = client.get("/")
     assert response.status_code == 200
-    assert b"Hello, World! MyVideosLIB API" in response.data
+    assert b"MyVideos - LIB" in response.data
 
 
 @pytest.mark.integration
