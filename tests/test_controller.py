@@ -181,7 +181,7 @@ def test_add_new_video_positve_without_category():
     }
 
     assert add_new_video(data) == 1
-    assert get_video_by_id(1).get("categoryId") is 1
+    assert get_video_by_id(1).get("categoryId") == 1
 
 
 @pytest.mark.unit
