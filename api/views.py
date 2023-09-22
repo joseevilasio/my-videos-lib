@@ -35,7 +35,7 @@ bp = Blueprint(
 
 @bp.route("/")
 def index():
-    return "Hello, World! MyVideosLIB API", 200
+    return render_template("index.html.j2")
 
 
 @bp.route("/register", methods=["GET", "POST"])
