@@ -1,4 +1,5 @@
-from flask_admin import Admin
+from flask import redirect, url_for
+from flask_admin import Admin, BaseView, expose
 from flask_admin.base import AdminIndexView
 from flask_admin.contrib.pymongo import ModelView
 from flask_simplelogin import login_required
@@ -8,8 +9,10 @@ from api.database import mongo
 from api.plugins import get_next_sequence_value
 
 # decorate Flask-Admin view via Monkey Patching
-AdminIndexView._handle_view = login_required(AdminIndexView._handle_view)
-ModelView._handle_view = login_required(ModelView._handle_view)
+AdminIndexView._handle_view = login_required(
+    AdminIndexView._handle_view, basic=True
+)
+ModelView._handle_view = login_required(ModelView._handle_view, basic=True)
 
 
 class VideosForm(form.Form):
@@ -23,7 +26,7 @@ class VideosForm(form.Form):
 
 
 class CategoryForm(form.Form):
-    title = title = fields.StringField("Title", [validators.data_required()])
+    title = fields.StringField("Title", [validators.data_required()])
     color = fields.TextAreaField("Color", [validators.data_required()])
     id = fields.HiddenField("id")
 
@@ -46,6 +49,18 @@ class AdminCategory(ModelView):
             category["id"] = get_next_sequence_value("category")
 
 
+class Token(BaseView):
+    @expose("/")
+    def index(self):
+        return redirect(url_for("api.token"))
+
+
+class MyView(BaseView):
+    @expose("/")
+    def index(self):
+        return redirect(url_for("simplelogin.logout"))
+
+
 def configure(app):
     """Init app on Flask-Admin"""
     app.admin = Admin(
@@ -57,3 +72,5 @@ def configure(app):
     )
     app.admin.add_view(AdminVideos(mongo.db.videos, "Videos"))
     app.admin.add_view(AdminCategory(mongo.db.category, "Category"))
+    app.admin.add_view(Token(name="Token"))
+    app.admin.add_view(MyView(name="LOGOUT"))
