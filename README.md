@@ -3,7 +3,7 @@
 
 # MY VIDEOS LIB - API CRUD - ALURA CHALLENGE 
 
-Uma bibiclioteca para armazenar as informações sobre os seus vídeos favoritos. O projeto faz parte de um desafio da Alura. 
+Uma biblioteca para armazenar as informações sobre os seus vídeos favoritos. O projeto faz parte de um desafio da Alura. 
 Para saber mais sobre o desafio, [clique aqui.](#-desafio)
 
 | :placard: Vitrine.Dev |   [Vitrine Dev José Junior](https://cursos.alura.com.br/vitrinedev/joseevilasio/project/CRUD-Challenge-Alura/3844433) |
@@ -33,7 +33,7 @@ Instalar as dependências do projeto com o Poetry:
 ```
 $ poetry install
 ```
-O projeto utiliza mongoDB como banco de dados, é precisor iniciar um container:
+O projeto utiliza mongoDB como banco de dados, então temos que iniciar um container:
 ```
 $ docker container run -d -p 27017:27017 --name mongo-myvideoslib mongo:latest
 ```
@@ -41,7 +41,7 @@ Agora é rodar o projeto em localhost para gerenciar e consumir a API:
 ```
 $ poetry run gunicorn -w 4 'api.app:create_app()'
 ```
-Uma outra opção para gerenciar a API atráves da linha de comando:
+Uma outra opção para gerenciar a API através da linha de comando:
 ```
 $ poetry run flask controller --help
 ```
@@ -53,7 +53,7 @@ $ sudo docker compose up --build
 ```
 
 ### 📦 Como funciona
-É preciso criar um conta para utilizar a aplicação, é possível fazer isso através do CLI e ```/register``` com a conta criada terá acesso ao ```token```, para utilizar nas requisições, ao acessar ```/admin```.
+É preciso criar uma conta para utilizar a aplicação, é possível fazer isso através do CLI e ```/register``` com a conta criada terá acesso ao ```token```, para utilizar nas requisições, ao acessar ```/admin```.
 
 Consumindo a API:
 
@@ -77,19 +77,19 @@ exemplo json :
 }
 ```
 
-READ - GET ```/videos``` devolve um json com todos os videos no banco de dados, outra forma é ```/videos/id``` repassar o id do video.
+READ - GET ```/videos``` devolve um json com todos os vídeos no banco de dados, outra forma é ```/videos/id``` repassar o id do vídeo.
 
-READ - GET ```/videos/?search=game``` devolve um json com todos os videos no banco de dados relacionado com o termo procurado.
+READ - GET ```/videos/?search=game``` devolve um json com todos os vídeos no banco de dados relacionado com o termo procurado.
 
 READ - GET ```/category``` devolve um json com todas as categorias no banco de dados, outra forma é ```/category/id``` repassar o id da categoria.
 
-READ - GET ```/category/id/videos``` devolve um json com todas videos relacionado a categoria indicado com id.
+READ - GET ```/category/id/videos``` devolve um json com todas vídeos relacionado a categoria indicado com id.
 
-UPDATE - PUT ```/videos/id``` atualiza as informações o video.
+UPDATE - PUT ```/videos/id``` atualiza as informações o vídeo.
 
 UPDATE - PUT ```/category/id``` atualiza as informações da categoria.
 
-DELETE - DELETE ```/videos/id``` deleta o video.
+DELETE - DELETE ```/videos/id``` deleta o vídeo.
 
 DELETE - DELETE ```/category/id``` deleta a categoria.
 
@@ -103,7 +103,7 @@ Documentação do inicio ao fim do projeto no dev.to/josejunior, status indicand
 Exemplo: Não iniciado ❌ / Iniciado ✅ 
 
 ## Semana 1 - Implementando uma API REST ✅
-**Implementação inicial:** Modelar o bando de dados conforme regra de neǵocio e roteamento. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/1#issue-1629409758]
+**Implementação inicial:** Modelar o banco de dados conforme regra de neǵocio e roteamento. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/1#issue-1629409758]
 
 ## Semana 2 - Adicionando entidades e relacionamentos  ✅
 **Implementação de Categorias:** Adicionar table em database com categoria e relacionar com database já existente e rotear novas rotas.  🔍[https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/2#issue-1629629636]
