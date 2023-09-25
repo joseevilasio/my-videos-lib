@@ -15,9 +15,49 @@ extensions = [
 FLASK_ADMIN_SWATCH = "minty"
 secret_key = "settings.secrets.secret_key"
 JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
-TOKEN = "settings.secrets.TOKEN"
+
+
+[development]
+
+VALUE = "On Development"
+
+mongo_uri = "mongodb://0.0.0.0:27017/myvideoslib"
+
+extensions = [
+    "api.database:configure",
+    "api.auth:configure",
+    "api.commands:configure",
+    "api.views:configure",
+    "api.admin:configure"    
+]
+
+FLASK_ADMIN_SWATCH = "minty"
+secret_key = "settings.secrets.secret_key"
+JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
+
+
+[production]
+
+VALUE = "On Production"
+
+
+mongo_uri = "mongodb+srv://joseevilasio:TgSc61lx2MEcW3fp@myvideoslib.cemdblz.mongodb.net/myvideoslib"
+
+extensions = [
+    "api.database:configure",
+    "api.auth:configure",
+    "api.commands:configure",
+    "api.views:configure",
+    "api.admin:configure"    
+]
+
+FLASK_ADMIN_SWATCH = "minty"
+secret_key = "settings.secrets.secret_key"
+JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
+
 
 [testing]
+
 VALUE = "On Testing"
 mongo_uri = "mongodb://localhost:27017/database_test"
 extensions = [
@@ -29,4 +69,3 @@ extensions = [
 ]
 secret_key = "settings.secrets.secret_key"
 JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
-TOKEN = "settings.secrets.TOKEN"
