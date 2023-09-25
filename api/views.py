@@ -52,7 +52,7 @@ def register():
 
         return redirect(url_for("admin.index"))
 
-    return render_template("register2.html.j2"), 200
+    return render_template("register.html.j2"), 200
 
 
 @bp.route("/token")
