@@ -21,7 +21,7 @@ JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
 
 VALUE = "On Development"
 
-mongo_uri = "mongodb://0.0.0.0:27017/myvideoslib"
+mongo_uri = "mongodb://localhost:27017/myvideoslib"
 
 extensions = [
     "api.database:configure",
@@ -40,8 +40,7 @@ JWT_SECRET_KEY = "settings.secrets.JWT_SECRET_KEY"
 
 VALUE = "On Production"
 
-
-mongo_uri = "mongodb+srv://joseevilasio:TgSc61lx2MEcW3fp@myvideoslib.cemdblz.mongodb.net/myvideoslib"
+mongo_uri = 'settings.secrets.mongo_uri_secret'
 
 extensions = [
     "api.database:configure",
