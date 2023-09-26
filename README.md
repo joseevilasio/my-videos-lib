@@ -102,6 +102,7 @@ DELETE - DELETE ```/videos/id``` deleta o vídeo.
 
 DELETE - DELETE ```/category/id``` deleta a categoria.
 
+![](https://github.com/joseevilasio/my-videos-lib/blob/main/assets/usage-api.gif)
 
 ### 💡 Desafio
 
@@ -109,7 +110,7 @@ O desafio consiste em criar um CRUD (Create, Read, Update, Delete)
 
 Documentação do inicio ao fim do projeto no dev.to/josejunior, status indicando o andamento. 
 
-Exemplo: Não iniciado ❌ / Iniciado ✅ 
+Exemplo: Não iniciado ❌ / Finalizado ✅ 
 
 ## Semana 1 - Implementando uma API REST ✅
 **Implementação inicial:** Modelar o banco de dados conforme regra de neǵocio e roteamento. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/1#issue-1629409758]
@@ -120,6 +121,6 @@ Exemplo: Não iniciado ❌ / Iniciado ✅
 ## Semana 3 - Implementando serviços de autenticação ✅
 **Segurança:** Nesta semana, o desafio será implementar um mecanismo de autenticação na API, para que apenas usuários autenticados possam interagir com ela. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/3#issue-1638409239]
 
-## Semana 4 - Deploy ❌
+## Semana 4 - Deploy ✅
 **Deploy:** Será necessário realizar o deploy da API em algum provedor Cloud, como o Heroku. 🔍 [https://github.com/joseevilasio/CRUD-Challenge-Alura/issues/3#issue-1638409239]
  
